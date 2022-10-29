@@ -1,1 +1,3 @@
-## project_f3a3g_o7c8d_t5h6p
+# Canadian Immigration and Visa Issuing Database
+## CPSC 304 Project
+### _by Hanze Wang, Kunyi Wang, and Shawn Wu_
