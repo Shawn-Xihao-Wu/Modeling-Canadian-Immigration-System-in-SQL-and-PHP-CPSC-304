@@ -1,31 +1,25 @@
-drop table AsylumRefugeeVisa;
-drop table WorkVisaSponseredBy;
-drop table StudentVisaVerifiedBy;
-drop table VisaFromIssue;
-
 drop table InterviewedBy;
-drop table InterviewsMakes;
 drop table ImmigrationOfficersWorksIn;
-
-drop table EmbassyConsulates;
-drop table AddressCountry;
-drop table ApprovedInstitutions;
-
-drop table TravelHistoryRecordsTravelsBy;
-drop table InOut;
-
-drop table ApplicantIDVisaIDStatus;
+drop table InterviewsMakes;
 drop table Creates;
 drop table Holds;
 drop table Applicants;
+drop table TravelHistoryRecordsTravelsBy;
+drop table InOut;
+drop table StudentVisaVerifiedBy;
+drop table WorkVisaSponseredBy;
+drop table AsylumRefugeeVisa;
+drop table VisaFromIssue;
 drop table Applications;
-drop table IssueDateExpirationDateStatus;
+drop table EmbassyConsulates;
+drop table ApprovedInstitutions;
+drop table AddressCountry;
 
-
-CREATE TABLE AddressCountry
-    (Address        VARCHAR(100)        PRIMARY KEY,
-    Country         VARCHAR(100)         NOT NULL);
--- grant select on AddressCountry to public;
+CREATE TABLE AddressCountry (
+    AddressName         VARCHAR(100)         PRIMARY KEY,
+    Country             VARCHAR(100)         NOT NULL
+);
+grant select on AddressCountry to public;
 
 CREATE TABLE ApprovedInstitutions (
     InstitutionID          VARCHAR(100),		
@@ -33,22 +27,28 @@ CREATE TABLE ApprovedInstitutions (
     Category               VARCHAR(100), 
     PRIMARY KEY (InstitutionID)
 );
--- grant select on ApprovedInstitutions to public;
+grant select on ApprovedInstitutions to public;
 
 CREATE TABLE EmbassyConsulates (
-    ECID        VARCHAR(100)        PRIMARY KEY,
-    Address     VARCHAR(100)        UNIQUE,
-    FOREIGN KEY (Address)
+    ECID            VARCHAR(100)        PRIMARY KEY,
+    AddressName     VARCHAR(100)        UNIQUE,
+    FOREIGN KEY (AddressName)
         REFERENCES AddressCountry
 );
--- grant select on EmbassyConsulates to public;
+grant select on EmbassyConsulates to public;
+
+CREATE TABLE Applications (
+    ApplicationID           VARCHAR(100)        PRIMARY KEY,
+    StatusOfApp             NUMBER(1)           NOT NULL
+);
+grant select on Applications to public;
 
 CREATE TABLE VisaFromIssue (
     VisaID          VARCHAR(100)        PRIMARY KEY,
     VisaType        VARCHAR(100),
     ApplicationID   VARCHAR(100)        NOT NULL,
     ECID            VARCHAR(100)        NOT NULL,
-    IssueDate DATE,
+    IssueDate       DATE,
     FOREIGN KEY (ApplicationID)
         REFERENCES Applications
         ON DELETE CASCADE,
@@ -56,7 +56,7 @@ CREATE TABLE VisaFromIssue (
         REFERENCES EmbassyConsulates
         ON DELETE CASCADE
 );
--- grant select VisaFromIssue to public;
+grant select on VisaFromIssue to public;
 
 CREATE TABLE AsylumRefugeeVisa (
     VisaID      VARCHAR(100)        PRIMARY KEY,
@@ -64,7 +64,7 @@ CREATE TABLE AsylumRefugeeVisa (
     FOREIGN KEY (VisaID) REFERENCES VisaFromIssue
         ON DELETE CASCADE
 );
--- grant select AsylumRefugeeVisa to public;
+grant select on AsylumRefugeeVisa to public;
 
 CREATE TABLE WorkVisaSponseredBy (
     VisaID          VARCHAR(100)        PRIMARY KEY,
@@ -76,7 +76,7 @@ CREATE TABLE WorkVisaSponseredBy (
     FOREIGN KEY (InstitutionID)
         REFERENCES ApprovedInstitutions
 );
--- grant select WorkVisaSponseredBy to public;
+grant select on WorkVisaSponseredBy to public;
 
 CREATE TABLE StudentVisaVerifiedBy (
     VisaID          VARCHAR(100)		PRIMARY KEY,
@@ -87,70 +87,50 @@ CREATE TABLE StudentVisaVerifiedBy (
     FOREIGN KEY (InstitutionID) 
         REFERENCES ApprovedInstitutions
 );
--- grant select StudentVisaVerifiedBy to public;
+grant select on StudentVisaVerifiedBy to public;
 
 CREATE TABLE InOut (
     Destination     VARCHAR(100),
     Departure       VARCHAR(100),
-    InOut          NUMBER(1)               NOT NULL,
+    InOut           NUMBER(1)               NOT NULL,
     PRIMARY KEY (Destination, Departure)
 );
+grant select on InOut to public;
 
 CREATE TABLE TravelHistoryRecordsTravelsBy (
     RecordID        VARCHAR(100)        PRIMARY KEY,
-    TimeOfTravel    TIMESTAMP           NOT NULL,
-    DateOfTravel    DATE                NOT NULL,
+    TimeOfTravel    TIMESTAMP           NOT NULL, -- No need for Date as TIMESTAMP includes Date
     Destination     VARCHAR(100)        NOT NULL,
     Departure       VARCHAR(100)        NOT NULL,
     VisaID          VARCHAR(100)        NOT NULL,
     FOREIGN KEY (Destination, Departure)
         REFERENCES InOut(Destination, Departure)
 );
--- grant select TravelHistoryRecordsTravelsBy to public;
+grant select on TravelHistoryRecordsTravelsBy to public;
 
 CREATE TABLE Applicants (
-    ApplicantID         VARCHAR(100)        PRIMARY KEY,
-    NameOfApp           VARCHAR(100)        NOT NULL,
-    Nationality         VARCHAR(100)        NOT NULL,
-    DateOfBirth         DATE                NOT NULL
+    ApplicantID             VARCHAR(100)        PRIMARY KEY,
+    NameOfApplicants        VARCHAR(100)        NOT NULL,
+    Nationality             VARCHAR(100)        NOT NULL,
+    DateOfBirth             DATE                NOT NULL
 );
--- grant select Applicants to public;
+grant select on Applicants to public;
 
-CREATE TABLE Applications (
-    ApplicationID           VARCHAR(100)        PRIMARY KEY,
-    StatusOfApp             NUMBER(1)           NOT NULL
-);
--- grant select Applications to public;
-
-CREATE TABLE IssueDateExpirationDateStatus (
-    IssueDate               DATE,
-    ExpirationDate          DATE,
-    Status                  NUMBER(1)           NOT NULL,
-    PRIMARY KEY (IssueDate, ExpirationDate) 
-);
--- grant select IssueDateExpirationDateStatus to public;
-
-CREATE TABLE Holds (
+-- I deleted the status attribute as it was deemed unnecessary by the TA.
+-- We can generate status from the expiration date. No need to store it.
+CREATE TABLE Holds ( 
     ApplicantID         VARCHAR(100),
     VisaID              VARCHAR(100),
     IssueDate           DATE                NOT NULL,
     ExpirationDate      DATE                NOT NULL,
     PRIMARY KEY (ApplicantID, VisaID),
-    FOREIGN KEY (IssueDate, ExpirationDate)
-    REFERENCES IssueDateExpirationDateStatus(IssueDate, ExpirationDate)
+    FOREIGN KEY (ApplicantID)
+        REFERENCES Applicants(ApplicantID),
+    FOREIGN KEY (VisaID)
+        REFERENCES VisaFromIssue(VisaID)
 );
--- grant select Holds to public;
+grant select on Holds to public;
 
-CREATE TABLE ApplicantIDVisaIDStatus (
-    ApplicantID             VARCHAR(100),
-    VisaID                  VARCHAR(100),
-    Status                  NUMBER(1)               NOT NULL,
-    PRIMARY KEY (ApplicantID, VisaID),    
-    FOREIGN KEY (ApplicantID, VisaID)
-        REFERENCES Holds(ApplicantID, VisaID)
-        ON DELETE CASCADE       
-);
--- grant select ApplicantIDVisaIDStatus to public;
 
 CREATE TABLE Creates (
     ApplicantID             VARCHAR(100),
@@ -163,29 +143,28 @@ CREATE TABLE Creates (
         REFERENCES Applications(ApplicationID)
         ON DELETE CASCADE
 );
--- grant select Creates to public;
+grant select on Creates to public;
 
 CREATE TABLE InterviewsMakes (
-    InterviewID         VARCHAR(100),		
-    DateOfInterview     DATE,
-    TimeOfInterview     TIMESTAMP,
+    InterviewID         VARCHAR(100),
+    TimeOfInterview     TIMESTAMP, -- No need for Date as TIMESTAMP includes DATE
     ApplicationID       VARCHAR(100)        NOT NULL,
     PRIMARY KEY (InterviewID),
     FOREIGN KEY (ApplicationID)
         REFERENCES Applications(ApplicationID)
 );
--- grant select InterviewsMakes to public;
+grant select on InterviewsMakes to public;
 
 CREATE TABLE ImmigrationOfficersWorksIn (
-    ECID            VARCHAR(100),		
-    OfficerID       VARCHAR(100),
-    Name            VARCHAR(100)        NOT NULL,
+    ECID                VARCHAR(100),		
+    OfficerID           VARCHAR(100),
+    NameOfOfficer       VARCHAR(100)        NOT NULL,
     PRIMARY KEY (ECID, OfficerID),
     FOREIGN KEY (ECID) 
         REFERENCES EmbassyConsulates(ECID)
         ON DELETE CASCADE
 );
--- grant select ImmigrationOfficersWorksIn to public;
+grant select on ImmigrationOfficersWorksIn to public;
 
 CREATE TABLE InterviewedBy(
     InterviewID         VARCHAR(100),
@@ -197,4 +176,4 @@ CREATE TABLE InterviewedBy(
     FOREIGN KEY (ECID, OfficerID)
         REFERENCES ImmigrationOfficersWorksIn(ECID, OfficerID)
 );
--- grant select InterviewedBy to public;
+grant select on InterviewedBy to public;
