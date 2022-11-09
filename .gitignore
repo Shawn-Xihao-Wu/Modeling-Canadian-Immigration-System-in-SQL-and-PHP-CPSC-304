@@ -1,4 +1,5 @@
-.pdf
-.DS_Store
-
+## ignore test directory
 test/
+
+*.pdf
+*.DS_Store
