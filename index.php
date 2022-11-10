@@ -20,12 +20,16 @@
       cursor: pointer;
     }
     
-    .button1 {background-color: #4CAF50;} /* Green */
-    .button2 {background-color: #008CBA;} /* Blue */
+    .button1 {background-color: #4CAF50; 
+              width: 300px;
+    } /* Green */
+    .button2 {background-color: #008CBA; 
+              width: 300px;
+    } /* Blue */
     </style>
 
   <body>
-    <div id="content">·
+    <div id="content">
       <p><a href="https://github.students.cs.ubc.ca/CPSC304-2022W-T1/project_f3a3g_o7c8d_t5h6p">Github</a></p>
       <h1>Manage Visas</h1>
       <p>
