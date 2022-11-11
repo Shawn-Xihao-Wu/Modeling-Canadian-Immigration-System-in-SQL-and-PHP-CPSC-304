@@ -8,9 +8,9 @@
         <h2>Insert New Approved Institution</h2>
         <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            InstitutuionID: <input type="text" name="insNo"> <br /><br />
-            InstitutuionName: <input type="text" name="insName"> <br /><br />
-            Category: <input type="text" name="insName"> <br /><br />
+            InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
+            InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
+            Category: <input type="text" name="Category"> <br /><br />
 
             <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
@@ -167,8 +167,8 @@
             // Create new table
             echo "<br> creating new table <br>";
             executePlainSQL("CREATE TABLE ApprovedInstitutions (InstitutionID VARCHAR(100) PRIMARY KEY, 
-                            InstitutionName VARCHAR(100),
-                            Category VARCHAR(100))");
+                                          InstitutionName VARCHAR(100),
+                                          Category VARCHAR(100))");
             OCICommit($db_conn);
         }
 
@@ -179,7 +179,7 @@
             $tuple = array (
                 ":bind1" => $_POST['InstitutuionID'],
                 ":bind2" => $_POST['InstitutuionName'],
-                ":bind2" => $_POST['Category']
+                ":bind3" => $_POST['Category']
             );
 
             $alltuples = array (
