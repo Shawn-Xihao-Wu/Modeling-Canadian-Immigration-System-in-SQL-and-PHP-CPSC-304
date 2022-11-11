@@ -1,5 +1,4 @@
-
-  <html>
+<html>
     <head>
         <title>Applicants</title>
     </head>
@@ -13,7 +12,7 @@
             Number: <input type="text" name="anumber"> <br /><br />
             Name: <input type="text" name="aname"> <br /><br />
 
-            <label for="country">Country</label>      
+            <label for="country">Country: </label><span style="color: red !important; display: inline; float: none;"></span>      
             <select id="country" name="country" class="form-control">
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
