@@ -155,7 +155,7 @@
             $new_name = $_POST['newName'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
+            executePlainSQL("UPDATE ApprovedInstitutions SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
             OCICommit($db_conn);
         }
 
@@ -166,7 +166,9 @@
 
             // Create new table
             echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
+            executePlainSQL("CREATE TABLE ApprovedInstitutions (InstitutionID VARCHAR(100) PRIMARY KEY, 
+                            InstitutionName VARCHAR(100),
+                            Category VARCHAR(100))");
             OCICommit($db_conn);
         }
 
@@ -184,7 +186,7 @@
                 $tuple
             );
 
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2, :bind3)", $alltuples);
+            executeBoundSQL("insert into ApprovedInstitutions values (:bind1, :bind2, :bind3)", $alltuples);
             OCICommit($db_conn);
         }
 
@@ -194,7 +196,7 @@
             $result = executePlainSQL("SELECT Count(*) FROM ApprovedInstitutions");
 
             if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
+                echo "<br> The number of tuples in ApprovedInstitutions: " . $row[0] . "<br>";
             }
         }
 
