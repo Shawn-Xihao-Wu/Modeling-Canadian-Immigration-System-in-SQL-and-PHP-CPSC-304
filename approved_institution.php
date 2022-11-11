@@ -10,7 +10,13 @@
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
             InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
-            Category: <input type="text" name="Category"> <br /><br />
+            <!-- Category: <input type="text" name="Category"> <br /><br /> -->
+            <label for="Category">Choose a category:</label>
+                <select id="cars" name="Category" form="carform">
+                    <option value="Company">Company</option>
+                    <option value="University/College">University/College</option>
+                </select>
+            <br /><br />
 
             <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
