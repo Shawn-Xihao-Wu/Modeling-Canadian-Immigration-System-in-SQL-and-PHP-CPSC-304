@@ -1,25 +1,16 @@
   <html>
     <head>
-        <title>Institutions</title>
+        <title>Approved Institution</title>
     </head>
 
     <body>
-        <h2>Reset</h2>
-        <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 
-        <form method="POST" action="oracle-test.php">
-            <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-            <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-            <p><input type="submit" value="Reset" name="reset"></p>
-        </form>
-
-        <hr />
-
-        <h2>Insert Values into DemoTable</h2>
+        <h2>Insert New Approved Institution</h2>
         <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br /><br />
-            Name: <input type="text" name="insName"> <br /><br />
+            InstitutuionID: <input type="text" name="insNo"> <br /><br />
+            InstitutuionName: <input type="text" name="insName"> <br /><br />
+            Category: <input type="text" name="insName"> <br /><br />
 
             <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
@@ -164,7 +155,7 @@
             $new_name = $_POST['newName'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE demoTable SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
             OCICommit($db_conn);
         }
 
