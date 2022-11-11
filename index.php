@@ -50,8 +50,8 @@
       
       <h1>Manage People</h1>
       <p>
-        <a href="issued-visa.html">
-          <button class="button button2">Manage visa-applicants</button>
+        <a href="applicants.php">
+          <button class="button button2">Applicants</button>
         </a>
       </p>
       <p>
