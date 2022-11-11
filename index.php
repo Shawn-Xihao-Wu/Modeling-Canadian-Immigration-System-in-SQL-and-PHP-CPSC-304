@@ -67,11 +67,6 @@
           <button class="button button2">Manage embassys</button>
         </a>
       </p>
-
-
-
-      
-
      
       <form action="/form-handler" method="POST">
         <p>Leave a comment here:</p>
