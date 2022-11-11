@@ -1,25 +1,16 @@
   <html>
     <head>
-        <title>Institutions</title>
+        <title>Approved Institution</title>
     </head>
 
     <body>
-        <h2>Reset</h2>
-        <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 
-        <form method="POST" action="oracle-test.php">
-            <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-            <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-            <p><input type="submit" value="Reset" name="reset"></p>
-        </form>
-
-        <hr />
-
-        <h2>Insert Values into DemoTable</h2>
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <h2>Insert New Approved Institution</h2>
+        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br /><br />
-            Name: <input type="text" name="insName"> <br /><br />
+            InstitutuionID: <input type="text" name="insNo"> <br /><br />
+            InstitutuionName: <input type="text" name="insName"> <br /><br />
+            Category: <input type="text" name="insName"> <br /><br />
 
             <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
@@ -29,7 +20,7 @@
         <h2>Update Name in DemoTable</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             Old Name: <input type="text" name="oldName"> <br /><br />
             New Name: <input type="text" name="newName"> <br /><br />
@@ -40,7 +31,7 @@
         <hr />
 
         <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
             <input type="submit" value="submit" name="countTuples"></p>
         </form>
@@ -164,7 +155,7 @@
             $new_name = $_POST['newName'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE demoTable SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
             OCICommit($db_conn);
         }
 
@@ -184,22 +175,23 @@
 
             //Getting the values from user and insert data into the table
             $tuple = array (
-                ":bind1" => $_POST['insNo'],
-                ":bind2" => $_POST['insName']
+                ":bind1" => $_POST['InstitutuionID'],
+                ":bind2" => $_POST['InstitutuionName'],
+                ":bind2" => $_POST['Category']
             );
 
             $alltuples = array (
                 $tuple
             );
 
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+            executeBoundSQL("insert into demoTable values (:bind1, :bind2, :bind3)", $alltuples);
             OCICommit($db_conn);
         }
 
         function handleCountRequest() {
             global $db_conn;
 
-            $result = executePlainSQL("SELECT Count(*) FROM demoTable");
+            $result = executePlainSQL("SELECT Count(*) FROM ApprovedInstitutions");
 
             if (($row = oci_fetch_row($result)) != false) {
                 echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";

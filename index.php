@@ -45,9 +45,10 @@
         </a>
       </p>
       <p>
-        <a href="approved-institution.html">
+        <a href="approved_institution.php">
           <button class="button button2">Manage approved institutions</button>
         </a>
+      </p>
   
       
       <h1>Manage People</h1>
