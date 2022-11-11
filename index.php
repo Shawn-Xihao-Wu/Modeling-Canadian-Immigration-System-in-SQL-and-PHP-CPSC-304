@@ -31,12 +31,14 @@
   <body>
     <div id="content">
       <p><a href="https://github.students.cs.ubc.ca/CPSC304-2022W-T1/project_f3a3g_o7c8d_t5h6p">Github</a></p>
-      <h1>Manage Visas</h1>
+
       <p>
         <a href="oracle-test.php">
-          <button class="button button2">See sample project</button>
+          <button class="button button1">See sample project</button>
         </a>
       </p>
+      <h1>Manage Visas</h1>
+      
       <p>
         <a href="issued-visa.html">
           <button class="button button2">Manage issued visas</button>

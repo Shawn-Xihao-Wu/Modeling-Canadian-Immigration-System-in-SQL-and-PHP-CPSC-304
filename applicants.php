@@ -1,20 +1,3 @@
-<!--Test Oracle file for UBC CPSC304 2018 Winter Term 1
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  Modified by Jessica Wong (2018-06-22)
-  This file shows the very basics of how to execute PHP commands
-  on Oracle.
-  Specifically, it will drop a table, create a table, insert values
-  update values, and then query for values
-
-  IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
-
-  The script assumes you already have a server set up
-  All OCI commands are commands to the Oracle libraries
-  To get the file to work, you must place it somewhere where your
-  Apache server can run it, and you must rename it to have a ".php"
-  extension.  You must also change the username and password on the
-  OCILogon below to be your ORACLE username and password -->
 
   <html>
     <head>
@@ -299,8 +282,8 @@
 
         <hr />
 
-        <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
+        <h2>Applicants count</h2>
+        <form method="GET" action="applicants.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
             <input type="submit" name="countTuples"></p>
         </form>
@@ -428,16 +411,6 @@
             OCICommit($db_conn);
         }
 
-        function handleResetRequest() {
-            global $db_conn;
-            // Drop old table
-            executePlainSQL("DROP TABLE demoTable");
-
-            // Create new table
-            echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
-            OCICommit($db_conn);
-        }
 
         function handleInsertRequest() {
             global $db_conn;
@@ -459,10 +432,10 @@
         function handleCountRequest() {
             global $db_conn;
 
-            $result = executePlainSQL("SELECT Count(*) FROM demoTable");
+            $result = executePlainSQL("SELECT Count(*) FROM Applicants");
 
             if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
+                echo "<br> The number of applicants: " . $row[0] . "<br>";
             }
         }
 
