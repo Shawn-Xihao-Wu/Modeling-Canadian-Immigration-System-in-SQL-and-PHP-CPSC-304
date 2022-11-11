@@ -70,13 +70,7 @@
         </a>
       </p>
      
-      <form action="/form-handler" method="POST">
-        <p>Leave a comment here:</p>
-        <textarea name="text-input"></textarea>
-        <br/>
-        <input type="submit" />
-        
-      </form>
+
 
     
 
