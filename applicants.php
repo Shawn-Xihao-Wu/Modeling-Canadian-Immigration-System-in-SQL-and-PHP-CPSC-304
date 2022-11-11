@@ -10,10 +10,10 @@
 
         <form method="POST" action="applicants.php">
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br /><br />
+            Number: <input type="text" name="anumber"> <br /><br />
             Name: <input type="text" name="aname"> <br /><br />
 
-            <label for="country">Country</label><span style="color: red !important; display: inline; float: none;"></span>      
+            <label for="country">Country: </label><span style="color: red !important; display: inline; float: none;"></span>      
             <select id="country" name="country" class="form-control">
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
@@ -260,10 +260,11 @@
                 <option value="Zambia">Zambia</option>
                 <option value="Zimbabwe">Zimbabwe</option>
             </select> <br /><br />
+
             <label for="birthday">Birthday:</label>
             <input type="date" id="birthday" name="birthday"> <br /><br />
 
-            <input type="submit" value="Confirm" name="insertSubmit"></p>
+            <input type="submit" value="Confirm"></p>
         </form>
 
 
@@ -423,15 +424,17 @@
 
             //Getting the values from user and insert data into the table
             $tuple = array (
-                ":bind1" => $_POST['insNo'],
-                ":bind2" => $_POST['insName']
+                ":bind1" => $_POST['anumber'],
+                ":bind2" => $_POST['aname']
+                // ":bind3" => $_POST['country']
+                // ":bind4" => $_POST['birthday']
             );
 
             $alltuples = array (
                 $tuple
             );
 
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
+            executeBoundSQL("insert into Applicants values (:bind1, :bind2)", $alltuples);
             OCICommit($db_conn);
         }
 
