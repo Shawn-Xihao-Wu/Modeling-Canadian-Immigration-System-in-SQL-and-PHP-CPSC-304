@@ -42,6 +42,12 @@
             <input type="submit" value="submit" name="countTuples"></p>
         </form>
 
+        <p>
+        <a href="index.php">
+          <button class="button button2">back</button>
+        </a>
+        </p>
+
         <?php
 		//this tells the system that it's no longer just parsing html; it's now parsing PHP
 
