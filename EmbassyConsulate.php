@@ -1,11 +1,11 @@
-  <html>
+<html>
     <head>
-        <title>Approved Institution</title>
+        <title>Embassy and Consulates</title>
     </head>
 
     <body>
 
-        <h2>Insert New Approved Institution</h2>
+        <h2>Insert New Approved Embassy/Consulates</h2>
         <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />

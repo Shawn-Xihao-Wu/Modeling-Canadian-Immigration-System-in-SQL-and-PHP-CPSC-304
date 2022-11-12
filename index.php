@@ -73,10 +73,10 @@
       </p>
 
 
-      <h1>Manage embassys</h1>
+      <h1>Manage embassys/consulates</h1>
       <p>
-        <a href="issued-visa.html">
-          <button class="button button2">Manage embassys</button>
+        <a href="EmbassyConsulate.php">
+          <button class="button button2">Manage embassys/consulates</button>
         </a>
       </p>
     
