@@ -165,7 +165,7 @@
 
             $old_name = $_POST['oldName'];
             $new_name = $_POST['newName'];
-
+            
             // you need the wrap the old name and new name values with single quotations
             executePlainSQL("UPDATE ApprovedInstitutions SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
             OCICommit($db_conn);
@@ -199,6 +199,7 @@
             );
 
             executeBoundSQL("insert into ApprovedInstitutions values (:bind1, :bind2, :bind3)", $alltuples);
+            echo "hello!";
             OCICommit($db_conn);
         }
 

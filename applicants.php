@@ -260,8 +260,7 @@
                 <option value="Zimbabwe">Zimbabwe</option>
             </select> <br /><br />
 
-            <label for="birthday">Birthday:</label>
-            <input type="date" id="birthday" name="birthday"> <br /><br />
+            Birthday (DD-MM-YYYY, i.e., 01-DEC-2000): <input type="text" name="abirthday"> <br /><br />
 
             <input type="submit" value="Confirm"></p>
         </form>
@@ -424,16 +423,16 @@
             //Getting the values from user and insert data into the table
             $tuple = array (
                 ":bind1" => $_POST['anumber'],
-                ":bind2" => $_POST['aname']
-                // ":bind3" => $_POST['country']
-                // ":bind4" => $_POST['birthday']
+                ":bind2" => $_POST['aname'],
+                ":bind3" => $_POST['country'],
+                ":bind4" => $_POST['abirthday']
             );
 
             $alltuples = array (
                 $tuple
             );
 
-            executeBoundSQL("insert into Applicants values (:bind1, :bind2)", $alltuples);
+            executeBoundSQL("insert into Applicants values (:bind1, :bind2, :bind3, ;bind4)", $alltuples);
             OCICommit($db_conn);
         }
 
@@ -443,7 +442,7 @@
             $result = executePlainSQL("SELECT Count(*) FROM Applicants");
 
             if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of applicants: " . $row[0] . "<br>";
+                echo "<br> Number of applicants: " . $row[0] . "<br>";
             }
         }
 
