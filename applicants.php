@@ -12,7 +12,7 @@
             Number: <input type="text" name="anumber"> <br /><br />
             Name: <input type="text" name="aname"> <br /><br />
 
-            <label for="country">Country: </label><span style="color: red !important; display: inline; float: none;"></span>      
+            <label for="country">Country: </label>     
             <select id="country" name="country" class="form-control">
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
