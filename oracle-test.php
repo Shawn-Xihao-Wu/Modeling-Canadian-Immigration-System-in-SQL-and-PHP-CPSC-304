@@ -155,7 +155,9 @@
 
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_hanzew25", "a39408695", "dbhost.students.cs.ubc.ca:1522/stu");
+            $account = file_get_contents('account.txt');
+            $lines = explode(",", $account);
+            $db_conn = OCILogon(trim($lines[0]), trim($lines[1]), trim($lines[2]));
 
             if ($db_conn) {
                 debugAlertMessage("Database is Connected");

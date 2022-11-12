@@ -1,0 +1,3 @@
+ora_shawnxhw,
+a36123040,
+dbhost.students.cs.ubc.ca:1522/stu
