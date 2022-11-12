@@ -268,7 +268,7 @@
 
         <hr />
 
-        <h2>Update Name in DemoTable</h2>
+        <h2>Update Name in Applicants</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
         <form method="POST" action="applicants.php"> <!--refresh page when submitted-->
@@ -369,7 +369,7 @@
         }
 
         function printResult($result) { //prints results from a select statement
-            echo "<br>Retrieved data from table demoTable:<br>";
+            echo "<br>Retrieved data from table Applicants:<br>";
             echo "<table>";
             echo "<tr><th>ID</th><th>Name</th></tr>";
 
@@ -416,7 +416,7 @@
             echo "here";
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE Applicants SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE Applicants SET NameOfApplicants='" . $new_name . "' WHERE NameOfApplicants ='" . $old_name . "'");
             OCICommit($db_conn);
         }
 
