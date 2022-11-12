@@ -13,13 +13,6 @@ drop table VisaFromIssue;
 drop table Applications;
 drop table EmbassyConsulates;
 drop table ApprovedInstitutions;
-drop table AddressCountry;
-
-CREATE TABLE AddressCountry (
-    AddressName         VARCHAR(100)         PRIMARY KEY,
-    Country             VARCHAR(100)         NOT NULL
-);
-grant select on AddressCountry to public;
 
 CREATE TABLE ApprovedInstitutions (
     InstitutionID          VARCHAR(100),		
@@ -30,10 +23,9 @@ CREATE TABLE ApprovedInstitutions (
 grant select on ApprovedInstitutions to public;
 
 CREATE TABLE EmbassyConsulates (
-    ECID            VARCHAR(100)        PRIMARY KEY,
-    AddressName     VARCHAR(100)        UNIQUE,
-    FOREIGN KEY (AddressName)
-        REFERENCES AddressCountry
+    ECID            VARCHAR(100)            PRIMARY KEY,
+    AddressName     VARCHAR(100)            UNIQUE,
+    Country         VARCHAR(100)            NOT NULL
 );
 grant select on EmbassyConsulates to public;
 
