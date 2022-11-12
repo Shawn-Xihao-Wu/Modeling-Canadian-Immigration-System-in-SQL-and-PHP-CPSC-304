@@ -262,16 +262,16 @@
 
             Birthday (DD-MM-YYYY, i.e., 01-DEC-2000): <input type="text" name="abirthday"> <br /><br />
 
-            <input type="submit" value="Insert" name="insertSubmit"></p>
+            <input type="submit" value="Confirm" name="insertSubmit"></p>
         </form>
 
 
         <hr />
 
-        <h2>Update Name in DemoTable</h2>
+        <h2>Update Name in Applicants</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="POST" action="applicants.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             Old Name: <input type="text" name="oldName"> <br /><br />
             New Name: <input type="text" name="newName"> <br /><br />
@@ -369,7 +369,7 @@
         }
 
         function printResult($result) { //prints results from a select statement
-            echo "<br>Retrieved data from table demoTable:<br>";
+            echo "<br>Retrieved data from table Applicants:<br>";
             echo "<table>";
             echo "<tr><th>ID</th><th>Name</th></tr>";
 
@@ -385,8 +385,9 @@
 
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            //$db_conn = OCILogon("ora_wkyi2021", "a39028535", "dbhost.students.cs.ubc.ca:1522/stu");
-            $db_conn = OCILogon("ora_shawnxhw", "a36123040", "dbhost.students.cs.ubc.ca:1522/stu");
+            $account = file_get_contents('account.txt');
+            $lines = explode(",", $account);
+            $db_conn = OCILogon(trim($lines[0]), trim($lines[1]), trim($lines[2]));
 
             if ($db_conn) {
                 debugAlertMessage("Database is Connected");
@@ -412,8 +413,10 @@
             $old_name = $_POST['oldName'];
             $new_name = $_POST['newName'];
 
+            echo "here";
+
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE Applicants SET NameOfApplicants='" . $new_name . "' WHERE NameOfApplicants ='" . $old_name . "'");
             OCICommit($db_conn);
         }
 
