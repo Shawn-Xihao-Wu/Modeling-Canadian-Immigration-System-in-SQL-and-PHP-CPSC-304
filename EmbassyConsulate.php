@@ -407,7 +407,7 @@
             $new_name = $_POST['newName'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE ApprovedInstitutions SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
+            executePlainSQL("UPDATE EmbassyConsulates SET AddressName='" . $new_name . "' WHERE AddressName='" . $old_name . "'");
             OCICommit($db_conn);
         }
 
@@ -418,8 +418,8 @@
 
             // Create new table
             echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE ApprovedInstitutions (InstitutionID VARCHAR(100) PRIMARY KEY, 
-                                          InstitutionName VARCHAR(100),
+            executePlainSQL("CREATE TABLE EmbassyConsulates (InstitutionID VARCHAR(100) PRIMARY KEY, 
+                                          AddressName VARCHAR(100),
                                           Category VARCHAR(100))");
             OCICommit($db_conn);
         }
@@ -438,17 +438,17 @@
                 $tuple
             );
 
-            executeBoundSQL("insert into ApprovedInstitutions values (:bind1, :bind2, :bind3)", $alltuples);
+            executeBoundSQL("insert into EmbassyConsulates values (:bind1, :bind2, :bind3)", $alltuples);
             OCICommit($db_conn);
         }
 
         function handleCountRequest() {
             global $db_conn;
 
-            $result = executePlainSQL("SELECT Count(*) FROM ApprovedInstitutions");
+            $result = executePlainSQL("SELECT Count(*) FROM EmbassyConsulates");
 
             if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of tuples in ApprovedInstitutions: " . $row[0] . "<br>";
+                echo "<br> The number of tuples in EmbassyConsulates: " . $row[0] . "<br>";
             }
         }
 
