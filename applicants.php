@@ -262,7 +262,7 @@
 
             Birthday (DD-MM-YYYY, i.e., 01-DEC-2000): <input type="text" name="abirthday"> <br /><br />
 
-            <input type="submit" value="Confirm"></p>
+            <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
 
 
@@ -432,7 +432,7 @@
                 $tuple
             );
 
-            executeBoundSQL("insert into Applicants values (:bind1, :bind2, :bind3, ;bind4)", $alltuples);
+            executeBoundSQL("insert into Applicants values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
             OCICommit($db_conn);
         }
 

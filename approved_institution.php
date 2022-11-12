@@ -199,7 +199,6 @@
             );
 
             executeBoundSQL("insert into ApprovedInstitutions values (:bind1, :bind2, :bind3)", $alltuples);
-            echo "hello!";
             OCICommit($db_conn);
         }
 
