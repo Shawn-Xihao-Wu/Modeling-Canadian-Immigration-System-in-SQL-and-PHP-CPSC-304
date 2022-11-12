@@ -91,7 +91,7 @@ grant select on InOut to public;
 
 CREATE TABLE TravelHistoryRecordsTravelsBy (
     RecordID        VARCHAR(100)        PRIMARY KEY,
-    TimeOfTravel    TIMESTAMP           NOT NULL, -- No need for Date as TIMESTAMP includes Date
+    TimeOfTravel    TIMESTAMP           NOT NULL,
     Destination     VARCHAR(100)        NOT NULL,
     Departure       VARCHAR(100)        NOT NULL,
     VisaID          VARCHAR(100)        NOT NULL,
@@ -108,8 +108,6 @@ CREATE TABLE Applicants (
 );
 grant select on Applicants to public;
 
--- I deleted the status attribute as it was deemed unnecessary by the TA.
--- We can generate status from the expiration date. No need to store it.
 CREATE TABLE Holds ( 
     ApplicantID         VARCHAR(100),
     VisaID              VARCHAR(100),
@@ -139,7 +137,7 @@ grant select on Creates to public;
 
 CREATE TABLE InterviewsMakes (
     InterviewID         VARCHAR(100),
-    TimeOfInterview     TIMESTAMP, -- No need for Date as TIMESTAMP includes DATE
+    TimeOfInterview     TIMESTAMP,
     ApplicationID       VARCHAR(100)        NOT NULL,
     PRIMARY KEY (InterviewID),
     FOREIGN KEY (ApplicationID)
