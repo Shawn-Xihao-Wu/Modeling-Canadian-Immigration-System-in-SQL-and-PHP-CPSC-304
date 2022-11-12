@@ -422,7 +422,7 @@
             echo "<br> creating new table <br>";
             executePlainSQL("CREATE TABLE EmbassyConsulates (InstitutionID VARCHAR(100) PRIMARY KEY, 
                                           AddressName VARCHAR(100),
-                                          Category VARCHAR(100))");
+                                          Country VARCHAR(100))");
             OCICommit($db_conn);
         }
 
@@ -433,7 +433,7 @@
             $tuple = array (
                 ":bind1" => $_POST['ECID'],
                 ":bind2" => $_POST['AddressName'],
-                ":bind3" => $_POST['Category']
+                ":bind3" => $_POST['Country']
             );
 
             $alltuples = array (
