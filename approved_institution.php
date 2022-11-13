@@ -5,7 +5,8 @@
         $success = True; //keep track of errors so it redirects the page only if there are no errors
         $db_conn = NULL; // edit the login credentials in connectToDB()
         $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
-        $ViewAllStatement = "";
+        $viewAllStatement = "";
+        $countAllStatement = "";
 
         function debugAlertMessage($message) {
             global $show_debug_alert_messages;
@@ -146,12 +147,11 @@
         }
 
         function handleCountRequest() {
-            global $db_conn;
+            global $db_conn, $countAllStatement;
 
             $result = executePlainSQL("SELECT Count(*) FROM ApprovedInstitutions");
-
             if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of tuples in ApprovedInstitutions: " . $row[0] . "<br>";
+                $countAllStatement = $countAllStatement . "<br> The total number of approved institutions is: " . $row[0] . "<br>";
             }
         }
 
@@ -221,7 +221,7 @@
 
         <hr />
 
-        <h2>Update Name in DemoTable</h2>
+        <h2>Update Instution Name</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
         <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
@@ -234,14 +234,15 @@
 
         <hr />
 
-        <h2>Count the Tuples in DemoTable</h2>
+        <h2>Count All the Approved Institutions</h2>
         <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-            <input type="submit" value="submit" name="countTuples"></p>
+            <input type="submit" value="Count" name="countTuples"></p>
         </form>
+        <?php echo $countAllStatement ?>
 
         <hr />
-        <h2>View all the Approved Institutions</h2>
+        <h2>View All the Approved Institutions</h2>
         <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
             <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
             <input type="submit" value="View" name="viewAllTuples"></p>
