@@ -1,98 +1,12 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="UTF-8">
-  <title>Immigration Management</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
-</head>
-
-<style>
-  .button {
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
-
-  .button1 {
-    background-color: #4CAF50;
-    width: 300px;
-  }
-
-  /* Green */
-  .button2 {
-    background-color: #008CBA;
-    width: 300px;
-  }
-
-  /* Blue */
-</style>
-
-<body>
-  <div id="content">
-    <p><a href="https://github.students.cs.ubc.ca/CPSC304-2022W-T1/project_f3a3g_o7c8d_t5h6p">Github</a></p>
-
-    <h2>Start/Reset</h2>
-    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
-
-    <form method="POST" action="index.php">
-      <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-      <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-      <p><input type="submit" value="Start/Reset" name="start/reset"></p>
-    </form>
-
-    <p>
-      <a href="oracle-test.php">
-        <button class="button button1">See sample project</button>
-      </a>
-    </p>
-    <h1>Manage Visas</h1>
-
-    <p>
-      <a href="visa.html">
-        <button class="button button2">Manage issued visas</button>
-      </a>
-    </p>
-    <p>
-      <a href="approved_institutions.php">
-        <button class="button button2">Manage approved institutions</button>
-      </a>
-    </p>
-
-
-    <h1>Manage People</h1>
-    <p>
-      <a href="applicants.php">
-        <button class="button button2">Applicants</button>
-      </a>
-    </p>
-    <p>
-      <a href="visa.html">
-        <button class="button button2">Manage visa-holders</button>
-      </a>
-    </p>
-
-
-    <h1>Manage Embassy & Consulates</h1>
-    <p>
-      <a href="embassy_consulates.php">
-        <button class="button button2">Manage embassys/consulates</button>
-      </a>
-    </p>
-
-    <?php
+<?php
     //this tells the system that it's no longer just parsing html; it's now parsing PHP
 
     $success = True; //keep track of errors so it redirects the page only if there are no errors
     $db_conn = NULL; // edit the login credentials in connectToDB()
     $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
+    $resetStatement = "";
 
     function debugAlertMessage($message)
     {
@@ -164,6 +78,7 @@
       return (substr($haystack, 0, $length) === $needle);
     }
 
+    // Modified from https://stackoverflow.com/questions/4027769/running-mysql-sql-files-in-php
     function run_sql_file($location)
     {
       //load file
@@ -193,9 +108,9 @@
 
     function handleResetRequest()
     {
-      global $db_conn;
+      global $db_conn, $resetStatement;
 
-      echo "<br> Starting/Reseting... <br>";
+      $resetStatement .= "Starting/Reseting...";
       run_sql_file('project.sql');
 
       OCICommit($db_conn);
@@ -217,6 +132,93 @@
       handlePOSTRequest();
     }
     ?>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Immigration Management</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+
+<style>
+  .button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .button1 {
+    background-color: #4CAF50;
+    width: 300px;
+  }
+
+  /* Green */
+  .button2 {
+    background-color: #008CBA;
+    width: 300px;
+  }
+
+  /* Blue */
+</style>
+
+<body>
+  <div id="content">
+    <p><a href="https://github.students.cs.ubc.ca/CPSC304-2022W-T1/project_f3a3g_o7c8d_t5h6p">Github</a></p>
+
+    <h2>Start/Reset</h2>
+    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+
+    <form method="POST" action="index.php">
+      <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
+      <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
+      <p><input type="submit" value="Start/Reset" name="start/reset"></p>
+    </form>
+    <?php echo $resetStatement ?>
+
+    <p>
+      <a href="oracle-test.php">
+        <button class="button button1">See sample project</button>
+      </a>
+    </p>
+    <h1>Manage Visas</h1>
+
+    <p>
+      <a href="visa.html">
+        <button class="button button2">Manage issued visas</button>
+      </a>
+    </p>
+    <p>
+      <a href="approved_institutions.php">
+        <button class="button button2">Manage approved institutions</button>
+      </a>
+    </p>
+
+
+    <h1>Manage People</h1>
+    <p>
+      <a href="applicants.php">
+        <button class="button button2">Applicants</button>
+      </a>
+    </p>
+    <p>
+      <a href="visa.html">
+        <button class="button button2">Manage visa-holders</button>
+      </a>
+    </p>
+
+
+    <h1>Manage Embassy & Consulates</h1>
+    <p>
+      <a href="embassy_consulates.php">
+        <button class="button button2">Manage embassys/consulates</button>
+      </a>
+    </p>
 </body>
 </div>
 </html>

@@ -82,7 +82,7 @@ function executeBoundSQL($cmdstr, $list)
 function printAllTuples($result)
 { //prints results from a select statement
     $statement = "";
-    $statement .=  "<br>Retrieved data... <br>";
+    $statement .=  "<br>Retrieving data... <br>";
     $statement .= "<table>";
     $statement .= "<tr><th>ECID</th><th>Address</th><th>Country</th></tr>";
 

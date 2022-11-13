@@ -1,7 +1,7 @@
-## ignore test directory
 test/
 
 *.pdf
 *.DS_Store
-
 *.txt
+
+wrapper.php

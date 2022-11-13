@@ -82,7 +82,7 @@
     function printAllTuples($result)
     { //prints results from a select statement
         $statement = "";
-        $statement .= "<br>Retrieved data...<br>";
+        $statement .= "<br>Retrieving data...<br>";
         $statement .= "<table>";
         $statement .= "<tr><th>Institution ID</th><th>Name</th><th>Category</th></tr>";
 
