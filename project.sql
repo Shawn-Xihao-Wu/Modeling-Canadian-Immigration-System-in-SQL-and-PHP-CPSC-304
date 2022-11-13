@@ -167,3 +167,7 @@ CREATE TABLE InterviewedBy(
         REFERENCES ImmigrationOfficersWorksIn(ECID, OfficerID)
 );
 grant select on InterviewedBy to public;
+
+INSERT into ApprovedInstitutions VALUES ('TXE2523', 'University of British Columbia', 'University/College');
+
+INSERT into ApprovedInstitutions VALUES ('EFW0654', 'Microsoft', 'Company');

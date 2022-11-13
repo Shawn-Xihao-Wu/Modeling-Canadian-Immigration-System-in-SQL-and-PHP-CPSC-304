@@ -1,59 +1,11 @@
   <html>
-    <head>
-        <title>Approved Institution</title>
-    </head>
-
-    <body>
-
-        <h2>Insert New Approved Institution</h2>
-        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
-            InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
-            <!-- Category: <input type="text" name="Category"> <br /><br /> -->
-            <label for="Category">Choose a category:</label>
-                <select id="cars" name="Category" form="carform">
-                    <option value="Company">Company</option>
-                    <option value="University/College">University/College</option>
-                </select>
-            <br /><br />
-
-            <input type="submit" value="Insert" name="insertSubmit"></p>
-        </form>
-
-        <hr />
-
-        <h2>Update Name in DemoTable</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-
-        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            Old Name: <input type="text" name="oldName"> <br /><br />
-            New Name: <input type="text" name="newName"> <br /><br />
-
-            <input type="submit" value="Update" name="updateSubmit"></p>
-        </form>
-
-        <hr />
-
-        <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-            <input type="submit" value="submit" name="countTuples"></p>
-        </form>
-
-        <p>
-        <a href="index.php">
-          <button class="button button2">back</button>
-        </a>
-        </p>
-
         <?php
 		//this tells the system that it's no longer just parsing html; it's now parsing PHP
 
         $success = True; //keep track of errors so it redirects the page only if there are no errors
         $db_conn = NULL; // edit the login credentials in connectToDB()
         $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
+        $ViewAllStatement = "";
 
         function debugAlertMessage($message) {
             global $show_debug_alert_messages;
@@ -124,15 +76,16 @@
         }
 
         function printResult($result) { //prints results from a select statement
-            echo "<br>Retrieved data from table demoTable:<br>";
-            echo "<table>";
-            echo "<tr><th>ID</th><th>Name</th></tr>";
+            global $viewAllStatement;
+            $viewAllStatement = $viewAllStatement . "<br>Retrieved data...<br>";
+            $viewAllStatement = $viewAllStatement . "<table>";
+            $viewAllStatement = $viewAllStatement . "<tr><th>Institution ID</th><th>Name</th><th>Type</th></tr>";
 
             while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-                echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
+                $viewAllStatement = $viewAllStatement . "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>"; //or just use "echo $row[0]"
             }
 
-            echo "</table>";
+            $viewAllStatement = $viewAllStatement . "</table>";
         }
 
         function connectToDB() {
@@ -174,19 +127,6 @@
             OCICommit($db_conn);
         }
 
-        function handleResetRequest() {
-            global $db_conn;
-            // Drop old table
-            executePlainSQL("DROP TABLE demoTable");
-
-            // Create new table
-            echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE ApprovedInstitutions (InstitutionID VARCHAR(100) PRIMARY KEY, 
-                                          InstitutionName VARCHAR(100),
-                                          Category VARCHAR(100))");
-            OCICommit($db_conn);
-        }
-
         function handleInsertRequest() {
             global $db_conn;
 
@@ -215,13 +155,19 @@
             }
         }
 
+        function handleViewAllRequest() {
+            global $db_conn;
+
+            $result = executePlainSQL("SELECT * FROM ApprovedInstitutions");
+
+            printResult($result);
+        }
+
         // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest() {
             if (connectToDB()) {
-                if (array_key_exists('resetTablesRequest', $_POST)) {
-                    handleResetRequest();
-                } else if (array_key_exists('updateQueryRequest', $_POST)) {
+                if (array_key_exists('updateQueryRequest', $_POST)) {
                     handleUpdateRequest();
                 } else if (array_key_exists('insertQueryRequest', $_POST)) {
                     handleInsertRequest();
@@ -237,17 +183,78 @@
             if (connectToDB()) {
                 if (array_key_exists('countTuples', $_GET)) {
                     handleCountRequest();
+                } else if (array_key_exists('viewAllTuples', $_GET)) {
+                    handleViewAllRequest();
                 }
 
                 disconnectFromDB();
             }
         }
 
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+		if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest'])) {
+        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
             handleGETRequest();
         }
 		?>
+
+<head>
+        <title>Approved Institution</title>
+</head>
+
+    <body>
+
+        <h2>Insert New Approved Institution</h2>
+        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
+            InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
+            InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
+            <label for="Category">Choose a category:</label>
+                <select id="cars" name="Category" form="carform">
+                    <option value="Company">Company</option>
+                    <option value="University/College">University/College</option>
+                </select>
+            <br /><br />
+
+            <input type="submit" value="Insert" name="insertSubmit"></p>
+        </form>
+
+        <hr />
+
+        <h2>Update Name in DemoTable</h2>
+        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+
+        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+            Old Name: <input type="text" name="oldName"> <br /><br />
+            New Name: <input type="text" name="newName"> <br /><br />
+
+            <input type="submit" value="Update" name="updateSubmit"></p>
+        </form>
+
+        <hr />
+
+        <h2>Count the Tuples in DemoTable</h2>
+        <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="countTupleRequest" name="countTupleRequest">
+            <input type="submit" value="submit" name="countTuples"></p>
+        </form>
+
+        <hr />
+        <h2>View all the Approved Institutions</h2>
+        <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
+            <input type="submit" value="View" name="viewAllTuples"></p>
+        </form>
+        <?php echo $viewAllStatement ?>
+
+        <hr />
+
+        <p>
+        <a href="index.php">
+          <button class="button button2"">back</button>
+        </a>
+        </p>
+
 	</body>
 </html>
