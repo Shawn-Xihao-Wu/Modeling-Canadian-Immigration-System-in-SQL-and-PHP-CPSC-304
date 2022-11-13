@@ -95,6 +95,8 @@ CREATE TABLE TravelHistoryRecordsTravelsBy (
     Destination     VARCHAR(100)        NOT NULL,
     Departure       VARCHAR(100)        NOT NULL,
     VisaID          VARCHAR(100)        NOT NULL,
+    FOREIGN KEY (VisaID)
+        REFERENCES VisaFromIssue,
     FOREIGN KEY (Destination, Departure)
         REFERENCES InOut(Destination, Departure)
 );
