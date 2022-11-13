@@ -56,12 +56,12 @@
     <h1>Manage Visas</h1>
 
     <p>
-      <a href="issued-visa.html">
+      <a href="visa.html">
         <button class="button button2">Manage issued visas</button>
       </a>
     </p>
     <p>
-      <a href="approved_institution.php">
+      <a href="approved_institutions.php">
         <button class="button button2">Manage approved institutions</button>
       </a>
     </p>
@@ -74,15 +74,15 @@
       </a>
     </p>
     <p>
-      <a href="issued-visa.html">
+      <a href="visa.html">
         <button class="button button2">Manage visa-holders</button>
       </a>
     </p>
 
 
-    <h1>Manage embassys/consulates</h1>
+    <h1>Manage Embassy & Consulates</h1>
     <p>
-      <a href="EmbassyConsulate.php">
+      <a href="embassy_consulates.php">
         <button class="button button2">Manage embassys/consulates</button>
       </a>
     </p>

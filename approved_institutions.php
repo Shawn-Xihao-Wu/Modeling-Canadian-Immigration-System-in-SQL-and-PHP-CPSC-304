@@ -205,7 +205,7 @@
     <body>
 
         <h2>Insert New Approved Institution</h2>
-        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
+        <form method="POST" action="approved_institutions.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
             InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
@@ -224,7 +224,7 @@
         <h2>Update Instution Name</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-        <form method="POST" action="approved_institution.php"> <!--refresh page when submitted-->
+        <form method="POST" action="approved_institutions.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             Old Name: <input type="text" name="oldName"> <br /><br />
             New Name: <input type="text" name="newName"> <br /><br />
@@ -235,7 +235,7 @@
         <hr />
 
         <h2>Count All the Approved Institutions</h2>
-        <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
+        <form method="GET" action="approved_institutions.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
             <input type="submit" value="Count" name="countTuples"></p>
         </form>
@@ -243,7 +243,7 @@
 
         <hr />
         <h2>View All the Approved Institutions</h2>
-        <form method="GET" action="approved_institution.php"> <!--refresh page when submitted-->
+        <form method="GET" action="approved_institutions.php"> <!--refresh page when submitted-->
             <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
             <input type="submit" value="View" name="viewAllTuples"></p>
         </form>

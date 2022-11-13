@@ -6,7 +6,7 @@
     <body>
 
         <h2>Insert New Embassy/Consulates</h2>
-        <form method="POST" action="EmbassyConsulate.php"> <!--refresh page when submitted-->
+        <form method="POST" action="embassy_consulates.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             ECID: <input type="text" name="ECID"> <br /><br />
             AddressName: <input type="text" name="AddressName"> <br /><br />
@@ -266,7 +266,7 @@
         <h2>Update Name in DemoTable</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-        <form method="POST" action="EmbassyConsulate.php"> <!--refresh page when submitted-->
+        <form method="POST" action="embassy_consulates.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
             Old Name: <input type="text" name="oldName"> <br /><br />
             New Name: <input type="text" name="newName"> <br /><br />
@@ -277,7 +277,7 @@
         <hr />
 
         <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="EmbassyConsulate.php"> <!--refresh page when submitted-->
+        <form method="GET" action="embassy_consulates.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
             <input type="submit" value="submit" name="countTuples"></p>
         </form>
@@ -413,19 +413,6 @@
             OCICommit($db_conn);
         }
 
-        function handleResetRequest() {
-            global $db_conn;
-            // Drop old table
-            executePlainSQL("DROP TABLE demoTable");
-
-            // Create new table
-            echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE EmbassyConsulates (InstitutionID VARCHAR(100) PRIMARY KEY, 
-                                          AddressName VARCHAR(100),
-                                          Country VARCHAR(100))");
-            OCICommit($db_conn);
-        }
-
         function handleInsertRequest() {
             global $db_conn;
 
@@ -458,9 +445,7 @@
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest() {
             if (connectToDB()) {
-                if (array_key_exists('resetTablesRequest', $_POST)) {
-                    handleResetRequest();
-                } else if (array_key_exists('updateQueryRequest', $_POST)) {
+                if (array_key_exists('updateQueryRequest', $_POST)) {
                     handleUpdateRequest();
                 } else if (array_key_exists('insertQueryRequest', $_POST)) {
                     handleInsertRequest();
@@ -482,7 +467,7 @@
             }
         }
 
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+		if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
         } else if (isset($_GET['countTupleRequest'])) {
             handleGETRequest();
