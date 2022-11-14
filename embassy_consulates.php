@@ -7,6 +7,7 @@ $db_conn = NULL; // edit the login credentials in connectToDB()
 $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
 $countAllStatement = "";
 $viewAllStatement = "";
+$updateStatement = "";
 
 function debugAlertMessage($message)
 {
@@ -82,7 +83,7 @@ function executeBoundSQL($cmdstr, $list)
 function printAllTuples($result)
 { //prints results from a select statement
     $statement = "";
-    $statement .=  "<br>Retrieving data... <br>";
+    $statement .=  "Retrieving data...";
     $statement .= "<table>";
     $statement .= "<tr><th>ECID</th><th>Address</th><th>Country</th></tr>";
 
@@ -126,13 +127,15 @@ function disconnectFromDB()
 
 function handleUpdateRequest()
 {
-    global $db_conn;
+    global $db_conn, $updateStatement;
 
-    $old_name = $_POST['oldName'];
-    $new_name = $_POST['newName'];
+    $ECID = trim($_POST['ECID']);
+    $newAddress = trim($_POST['newAddress']);
 
-    // you need the wrap the old name and new name values with single quotations
-    executePlainSQL("UPDATE EmbassyConsulates SET AddressName='" . $new_name . "' WHERE AddressName='" . $old_name . "'");
+    executePlainSQL("UPDATE EmbassyConsulates SET AddressName = '" . $newAddress ."' WHERE ECID = '" . $ECID . "'");
+
+    $updateStatement .= "The address of '" . $ECID . "' is now at '" . $newAddress . "'";
+    
     OCICommit($db_conn);
 }
 
@@ -477,20 +480,6 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
     <hr />
 
-    <h2>Update Embassies & Consulates Address</h2>
-    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-
-    <form method="POST" action="embassy_consulates.php">
-        <!--refresh page when submitted-->
-        <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-        Old Name: <input type="text" name="oldName"> <br /><br />
-        New Name: <input type="text" name="newName"> <br /><br />
-
-        <input type="submit" value="Update" name="updateSubmit"></p>
-    </form>
-
-    <hr />
-
     <h2>Count All the Embassies & Consulates </h2>
     <form method="GET" action="embassy_consulates.php">
         <!--refresh page when submitted-->
@@ -500,20 +489,37 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
     <?php echo $countAllStatement ?>
 
     <hr />
-      <h2>View All the Embassies & Consulates </h2>
-      <form method="GET" action="embassy_consulates.php">
-          <!--refresh page when submitted-->
-          <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
-          <input type="submit" value="View" name="viewAllTuples"></p>
-      </form>
-      <?php echo $viewAllStatement ?>
 
-      <hr />
+    <h2>View All the Embassies & Consulates </h2>
+    <form method="GET" action="embassy_consulates.php">
+        <!--refresh page when submitted-->
+        <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
+        <input type="submit" value="View" name="viewAllTuples"></p>
+    </form>
+    <?php echo $viewAllStatement ?>
 
+    <hr />
+
+    <h2>Update Embassy & Consulate Addresses</h2>
+    <p>Please use ECID to identity the embassy/consulate whose address you want to update <em>(click "View" above to see all the ECIDs)</em>.</p>
+
+    <form method="POST" action="embassy_consulates.php">
+        <!--refresh page when submitted-->
+        <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+        ECID: <input type="text" name="ECID"> <br /><br />
+        New Address: <input type="text" name="newAddress"> <br /><br />
+
+        <input type="submit" value="Update" name="updateSubmit"></p>
+    </form>
+    <?php echo $updateStatement ?>
+
+
+    <hr />
     <p>
         <a href="index.php">
             <button class="button button2">Back</button>
         </a>
     </p>
 </body>
+
 </html>
