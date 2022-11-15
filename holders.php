@@ -86,9 +86,9 @@ function printAllTuples($result)
     $statement .=  "Retrieving data...";
     $statement .= "<table>";
     $statement .= "<tr><th>RecordID</th><th>TimeOfTravel</th><th>Destination</th><th>Departure</th><th>VisaID</th></tr>";
-    
+    echo $row[0];
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-        $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>" . $row[3] . "</td></tr>" . $row[4] . "</td></tr>"; 
+        $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td></tr>"; 
     }
 
     $statement .= "</table>";
@@ -165,8 +165,10 @@ function handleViewAllRequest()
     $AID = trim($_POST['ApplicantID']);
     
 
-    $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy WHERE 
-        VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . $AID . "')");
+    // $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy WHERE 
+    //     VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . $AID . "')");
+
+    $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy");
 
     $viewAllStatement = printAllTuples($result);
 }
