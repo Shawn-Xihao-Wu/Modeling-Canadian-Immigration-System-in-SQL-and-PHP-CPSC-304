@@ -202,7 +202,7 @@ function handleGETRequest()
     }
 }
 
-if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['viewAllTupleRequest'])) {
+if (isset($_POST['insertSubmit']) || isset($_POST['viewAllTupleRequest'])) {
     handlePOSTRequest();
 }
 ?>
