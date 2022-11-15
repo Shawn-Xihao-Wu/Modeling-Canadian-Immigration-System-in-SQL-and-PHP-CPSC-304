@@ -84,10 +84,10 @@
         $statement = "";
         $statement .= "<br>Retrieving data...<br>";
         $statement .= "<table>";
-        $statement .= "<tr><th>VisaID</th><th>VisaType</th><th>ApplicationID</th><th>ECID</th><th>IssueDate</th></tr>";
+        $statement .= "<tr><th>VisaID</th><th>VisaType</th><th>ApplicationID</th><th>ECID</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-            $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td></tr>"; //or just use "echo $row[0]"
+            $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         $statement .= "</table>";
