@@ -147,9 +147,9 @@
 
         $type = trim($_POST['type']);
 
-        $result = executePlainSQL("SELECT VisaID,ApplicationID,ECID FROM VisaFromIssue WHERE VisaType = '" . $type . "'");
+        $result = executePlainSQL("SELECT VisaID,ApplicationID,ECID FROM VisaFromIssue WHERE VisaType = '" .$type. "'");
         
-        $viewAllStatement = printSelectedTuples($result); 
+        $viewSelectedStatement = printSelectedTuples($result); 
     }
 
     function handleCountRequest()
