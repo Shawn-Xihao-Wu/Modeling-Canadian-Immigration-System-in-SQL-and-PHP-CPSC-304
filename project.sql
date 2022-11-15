@@ -177,3 +177,4 @@ INSERT into ApprovedInstitutions VALUES ('EFW0654', 'Microsoft', 'Company');
 INSERT into EmbassyConsulates VALUES ('UK001', 'Canada House, Trafalgar Sq, London SW1Y 5BJ', 'United Kingdom');
 
 INSERT into EmbassyConsulates VALUES ('US001', '466 Lexington Ave 20th floor, New York, NY 10017', 'United States');
+

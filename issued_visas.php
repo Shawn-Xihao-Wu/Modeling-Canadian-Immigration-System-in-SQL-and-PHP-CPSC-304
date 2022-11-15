@@ -1,4 +1,4 @@
-  <html>
+<html>
   <?php
     //this tells the system that it's no longer just parsing html; it's now parsing PHP
 
@@ -84,7 +84,23 @@
         $statement = "";
         $statement .= "<br>Retrieving data...<br>";
         $statement .= "<table>";
-        $statement .= "<tr><th>Institution ID</th><th>Name</th><th>Category</th></tr>";
+        $statement .= "<tr><th>VisaID</th><th>VisaType</th><th>ApplicationID</th><th>ECID</th><th>IssueDate</th></tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+
+        $statement .= "</table>";
+
+        return $statement;
+    }
+
+    function printSelectedTuples($result)
+    { //prints results from a select statement
+        $statement = "";
+        $statement .= "<br>Retrieving data...<br>";
+        $statement .= "<table>";
+        $statement .= "<tr><th>VisaID</th><th>ApplicationID</th><th>ECID</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
             $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>"; //or just use "echo $row[0]"
@@ -125,44 +141,24 @@
         OCILogoff($db_conn);
     }
 
-    function handleUpdateRequest()
+    function handleSearchRequest()
     {
-        global $db_conn;
+        global $db_conn, $viewSelectedStatement;
 
-        $old_name = $_POST['oldName'];
-        $new_name = $_POST['newName'];
+        $type = trim($_POST['type']);
 
-        // you need the wrap the old name and new name values with single quotations
-        executePlainSQL("UPDATE ApprovedInstitutions SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
-        OCICommit($db_conn);
-    }
-
-    function handleInsertRequest()
-    {
-        global $db_conn;
-
-        //Getting the values from user and insert data into the table
-        $tuple = array(
-            ":bind1" => $_POST['InstitutuionID'],
-            ":bind2" => $_POST['InstitutuionName'],
-            ":bind3" => $_POST['Category']
-        );
-
-        $alltuples = array(
-            $tuple
-        );
-
-        executeBoundSQL("INSERT into ApprovedInstitutions VALUES (:bind1, :bind2, :bind3)", $alltuples);
-        OCICommit($db_conn);
+        $result = executePlainSQL("SELECT VisaID,ApplicationID,ECID FROM VisaFromIssue WHERE VisaType = '" . $type . "'");
+        
+        $viewAllStatement = printSelectedTuples($result); 
     }
 
     function handleCountRequest()
     {
         global $db_conn, $countAllStatement;
 
-        $result = executePlainSQL("SELECT Count(*) FROM ApprovedInstitutions");
+        $result = executePlainSQL("SELECT Count(*) FROM VisaFromIssue");
         if (($row = oci_fetch_row($result)) != false) {
-            $countAllStatement = $countAllStatement . "<br> The total number of approved institutions is: " . $row[0] . "<br>";
+            $countAllStatement = $countAllStatement . "<br> The total number of issued visas is: " . $row[0] . "<br>";
         }
     }
 
@@ -170,7 +166,7 @@
     {
         global $db_conn, $viewAllStatement;
 
-        $result = executePlainSQL("SELECT * FROM ApprovedInstitutions");
+        $result = executePlainSQL("SELECT * FROM VisaFromIssue");
         
         $viewAllStatement = printAllTuples($result);   
     }
@@ -180,10 +176,8 @@
     function handlePOSTRequest()
     {
         if (connectToDB()) {
-            if (array_key_exists('updateQueryRequest', $_POST)) {
-                handleUpdateRequest();
-            } else if (array_key_exists('insertQueryRequest', $_POST)) {
-                handleInsertRequest();
+            if (array_key_exists('searchQueryRequest', $_POST)) {
+                handleSearchRequest();
             }
 
             disconnectFromDB();
@@ -205,7 +199,7 @@
         }
     }
 
-    if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+    if (isset($_POST['searchSubmit'])) {
         handlePOSTRequest();
     } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
         handleGETRequest();
@@ -213,44 +207,26 @@
     ?>
 
   <head>
-      <title>Approved Institution</title>
+      <title>Issued Visas</title>
   </head>
 
   <body>
 
-      <h2>Insert New Approved Institution</h2>
-      <form method="POST" action="approved_institutions.php">
+      <h2>Search for visa:</h2>
+      <form method="POST" action="issued_visas.php">
           <!--refresh page when submitted-->
-          <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-          InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
-          InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
-          <label for="Category">Choose a category: </label>
-          <select id="Category" name="Category" class="form-control">
-              <option value="Company">Company</option>
-              <option value="University/College">University/College</option>
-          </select> <br /><br />
+          <input type="hidden" id="searchQueryRequest" name="searchQueryRequest">
+          Filtered by type: <input type="text" name="type"> <br /><br />
 
-          <input type="submit" value="Insert" name="insertSubmit"></p>
+          <input type="submit" value="Search" name="searchSubmit"></p>
       </form>
+
+      <?php echo $viewSelectedStatement ?>
 
       <hr />
 
-      <h2>Update Instution Name</h2>
-      <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-
-      <form method="POST" action="approved_institutions.php">
-          <!--refresh page when submitted-->
-          <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-          Old Name: <input type="text" name="oldName"> <br /><br />
-          New Name: <input type="text" name="newName"> <br /><br />
-
-          <input type="submit" value="Update" name="updateSubmit"></p>
-      </form>
-
-      <hr />
-
-      <h2>Count All the Approved Institutions</h2>
-      <form method="GET" action="approved_institutions.php">
+      <h2>Count All the issued visas</h2>
+      <form method="GET" action="issued_visas.php">
           <!--refresh page when submitted-->
           <input type="hidden" id="countTupleRequest" name="countTupleRequest">
           <input type="submit" value="Count" name="countTuples"></p>
@@ -258,8 +234,8 @@
       <?php echo $countAllStatement ?>
 
       <hr />
-      <h2>View All the Approved Institutions</h2>
-      <form method="GET" action="approved_institutions.php">
+      <h2>View All the issued visas</h2>
+      <form method="GET" action="issued_visas.php">
           <!--refresh page when submitted-->
           <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
           <input type="submit" value="View" name="viewAllTuples"></p>

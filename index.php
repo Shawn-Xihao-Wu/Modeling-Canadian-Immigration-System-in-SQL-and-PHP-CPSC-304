@@ -189,7 +189,7 @@
     <h1>Manage Visas</h1>
 
     <p>
-      <a href="visa.html">
+      <a href="issued_visas.php">
         <button class="button button2">Manage issued visas</button>
       </a>
     </p>
