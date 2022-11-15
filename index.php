@@ -207,8 +207,8 @@
       </a>
     </p>
     <p>
-      <a href="visa.html">
-        <button class="button button2">Manage visa-holders</button>
+      <a href="holders.php">
+        <button class="button button2">Visa-holders</button>
       </a>
     </p>
 
