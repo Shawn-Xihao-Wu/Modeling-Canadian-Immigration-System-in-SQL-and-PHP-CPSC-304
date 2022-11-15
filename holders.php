@@ -166,7 +166,7 @@ function handleViewAllRequest()
     
 
     $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy WHERE 
-        VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . AID . "')");
+        VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . $AID . "')");
 
     $viewAllStatement = printAllTuples($result);
 }
