@@ -281,6 +281,18 @@
 
         <hr />
 
+        <h2>View All Applicants </h2>
+            <form method="GET" action="applicants.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
+            <input type="submit" value="View" name="viewAllTuples"></p>
+            </form>
+        <?php echo $viewAllStatement ?>
+
+        <hr />
+
+        
+
         <h2>Applicants count</h2>
         <form method="GET" action="applicants.php"> <!--refresh page when submitted-->
             <input type="hidden" id="countTupleRequest" name="countTupleRequest">
@@ -450,6 +462,31 @@
             }
         }
 
+        function handleViewAllRequest() {
+        
+            global $db_conn, $viewAllStatement;
+
+            $result = executePlainSQL("SELECT * FROM Applicants");
+
+            $viewAllStatement = printAllTuples($result);
+        }
+
+        function printAllTuples($result)
+        { //prints results from a select statement
+            $statement = "";
+            $statement .=  "Retrieving data...";
+            $statement .= "<table>";
+            $statement .= "<tr><th>ApplicantID</th><th>NameOfApplicants</th><th>Nationality</th><th>DateOfBirth</th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3]. "</td></tr>"; //or just use "echo $row[0]"
+            }
+
+            $statement .= "</table>";
+
+            return $statement;
+        }
+
         // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
         function handlePOSTRequest() {
@@ -470,6 +507,8 @@
             if (connectToDB()) {
                 if (array_key_exists('countTuples', $_GET)) {
                     handleCountRequest();
+                } else if (array_key_exists('viewAllTuples', $_GET)) {
+                    handleViewAllRequest();
                 }
 
                 disconnectFromDB();
@@ -478,7 +517,7 @@
 
 		if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest'])) {
+        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
             handleGETRequest();
         }
 		?>
