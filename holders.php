@@ -86,7 +86,7 @@ function printAllTuples($result)
     $statement .=  "Retrieving data...";
     $statement .= "<table>";
     $statement .= "<tr><th>RecordID</th><th>TimeOfTravel</th><th>Destination</th><th>Departure</th><th>VisaID</th></tr>";
-    echo $row[0];
+
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
         $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td></tr>"; 
     }
@@ -165,10 +165,9 @@ function handleViewAllRequest()
     $AID = trim($_POST['ApplicantID']);
     
 
-    // $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy WHERE 
-    //     VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . $AID . "')");
+    $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy WHERE VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . $AID . "')");
 
-    $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy");
+    //$result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy");
 
     $viewAllStatement = printAllTuples($result);
 }
@@ -182,6 +181,8 @@ function handlePOSTRequest()
             handleUpdateRequest();
         } else if (array_key_exists('insertQueryRequest', $_POST)) {
             handleInsertRequest();
+        } else if (array_key_exists('viewAllTuples', $_POST)) {
+            handleViewAllRequest();
         }
 
         disconnectFromDB();
@@ -195,18 +196,14 @@ function handleGETRequest()
     if (connectToDB()) {
         if (array_key_exists('countTuples', $_GET)) {
             handleCountRequest();
-        } else if (array_key_exists('viewAllTuples', $_GET)) {
-            handleViewAllRequest();
         }
 
         disconnectFromDB();
     }
 }
 
-if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['viewAllTupleRequest'])) {
     handlePOSTRequest();
-} else if ( isset($_GET['viewAllTupleRequest'])) {
-    handleGETRequest();
 }
 ?>
 
@@ -477,7 +474,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
 
     <h2>View travel history by ApplicantID </h2>
-    <form method="GET" action="holders.php">
+    <form method="POST" action="holders.php">
         <!--refresh page when submitted-->
         ApplicantID: <input type="text" name="ApplicantID"> <br /><br />
         <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
