@@ -6,6 +6,7 @@
         $db_conn = NULL; // edit the login credentials in connectToDB()
         $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
         $viewAllStatement = "";
+        $viewGroupByStatement = "";
 
         function debugAlertMessage($message) {
             global $show_debug_alert_messages;
@@ -91,6 +92,22 @@
             return $statement;
         }
 
+        function printGroupByTuples($result)
+        {   
+            $statement = "";
+            $statement .= "<table>";
+            $statement .= "<tr><th>Nationality</th><th> Count </th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td></tr>"; //or just use "echo $row[0]"
+            }
+
+            $statement .= "</table>";
+
+            return $statement;
+
+        }
+
         function connectToDB() {
             global $db_conn;
 
@@ -171,6 +188,17 @@
         }
 
 
+        function handleGroupByRequest() {
+        
+            global $db_conn, $viewGroupByStatement;
+
+
+            $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) < 2");
+
+            $viewGroupByStatement = printGroupByTuples($result);
+        }
+
+
 
         // HANDLE ALL POST ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
@@ -194,6 +222,8 @@
                     handleCountRequest();
                 } else if (array_key_exists('viewAllTuples', $_GET)) {
                     handleViewAllRequest();
+                } else if (array_key_exists('viewGroupByHavingTuple', $_GET)) {
+                    handleGroupByRequest();
                 }
 
                 disconnectFromDB();
@@ -202,7 +232,7 @@
 
 		if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
+        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest'])) {
             handleGETRequest();
         }
 		?>
@@ -495,6 +525,16 @@
             <input type="submit" value="View" name="viewAllTuples"></p>
             </form>
         <?php echo $viewAllStatement ?>
+
+        <hr />
+
+        <h2>Find the country with only one applicant older then 50 years old</h2>
+            <form method="GET" action="applicants.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="viewGroupByHavingTupleRequest" name="viewGroupByHavingTupleRequest">
+            <input type="submit" value="View" name="viewGroupByHavingTuple"></p>
+            </form>
+        <?php echo $viewGroupByStatement ?>
 
         <hr />
 
