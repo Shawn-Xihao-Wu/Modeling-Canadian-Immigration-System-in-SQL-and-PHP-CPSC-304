@@ -7,6 +7,15 @@ $db_conn = NULL; // edit the login credentials in connectToDB()
 $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
 $viewTravelStatement = "";
 $viewAllHolderStatement = "";
+$numOfColumns = 0;
+$columns = array(
+    "ApplicantID"       => $_GET['attr1'],
+    "Name"              => $_GET['attr2'],
+    "Nationality"       => $_GET['attr3'],
+    "VisaID"            => $_GET['attr4'],
+    "Issue Date"        => $_GET['attr5'],
+    "Expiration Date"   => $_GET['attr6']
+);
 
 function debugAlertMessage($message)
 {
@@ -124,21 +133,6 @@ function printTravelTuples($result)
     return $statement;
 }
 
-function printAllHolders($result)
-{
-    $statement = "";
-    $statement .= "Retrieving data...";
-    $statement .= "<table>";
-    $statement .= "<tr><th>ApplicantID</th><th>Name</th><th>Nationality</th><th>VisaID</th><th>Issue Date</th><th>Expiration Date</th></tr>";
-    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-        $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] ."</td><td>" . $row[5] ."</td></tr>"; 
-    }
-
-    $statement .= "</table>";
-
-    return $statement;
-}
-
 
 function handleViewTravelTupleRequest()
 {
@@ -153,13 +147,72 @@ function handleViewTravelTupleRequest()
     $viewTravelStatement = printTravelTuples($result);
 }
 
+function printHolderTuples($result)
+{
+    global $columns, $numOfColumns;
+    $statement = "";
+    $statement .= "Retrieving data...";
+    $statement .= "<table><tr>";
+
+    foreach ($columns as $x => $column) {
+        if(!empty($column)) {
+            $statement .= "<th>" . $x . "</th>";
+        }
+    }
+    $statement .= "</tr>";
+    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+        $statement .= "<tr>";
+        for ($i = 0; $i<$numOfColumns; $i++) {
+            $statement .= "<td>" . $row[$i] . "</td>";
+        }
+        $statement .= "</tr>";
+    }
+
+    $statement .= "</tr></table>";
+
+    return $statement;
+}
+
+//"SELECT DISTINCT H.ApplicantID, A.NameOfApplicants, A.Nationality, H.VisaID, H.IssueDate, H.ExpirationDate FROM Holds H, Applicants A WHERE H.ApplicantID = A.ApplicantID";
+function holderQueryGenerator()
+{
+    global $columns;
+    $query = "SELECT DISTINCT";
+    
+    foreach($columns as $x => $column) {
+        if (!empty($column)) {
+            $query .= " " . $column . ","; 
+        }
+    }
+
+    $query = substr($query, 0, -1);
+    $query .= " FROM Holds, Applicants WHERE Holds.ApplicantID = Applicants.ApplicantID";
+
+    return $query;
+}
+
+function checkColumnNum()
+{
+    global $numOfColumns, $columns;
+    foreach ($columns as $x => $column) {
+        if (!empty($column)) {
+            $numOfColumns++;
+        }
+    }
+}
+
 function handleViewAllHolderRequest()
 {
-    global $db_conn, $viewAllHolderStatement;
+    global $db_conn, $viewAllHolderStatement, $numOfColumns;
 
-    $result = executePlainSQL("SELECT H.ApplicantID, A.NameOfApplicants, A.Nationality, H.VisaID, H.IssueDate, H.ExpirationDate FROM Holds H, Applicants A WHERE H.ApplicantID = A.ApplicantID");
+    checkColumnNum();
 
-    $viewAllHolderStatement = printAllHolders($result);
+    if ($numOfColumns != 0) {
+        $result = executePlainSQL(holderQueryGenerator());
+        $viewAllHolderStatement = printHolderTuples($result);
+    } else {
+        $viewAllHolderStatement = "ERROR: Please select at least one column name!";
+    }
 }
 
 // HANDLE ALL POST ROUTES
@@ -202,11 +255,26 @@ if (isset($_POST['viewTravelTupleRequest'])) {
 <body>
 
     <h2>View All Visa-Holders </h2>
+    <p>Select the column names of the table (<em>please select at least one</em>):</p>
     <form method="GET" action="holders.php">
-          <!--refresh page when submitted-->
-          <input type="hidden" id="viewAllHolderRequest" name="viewAllHolderRequest">
-          <input type="submit" value="View" name="viewAllHolders"></p>
-      </form>
+        <!--refresh page when submitted-->
+        <input type="hidden" id="viewAllHolderRequest" name="viewAllHolderRequest">
+        <input type="checkbox" id="attr1" name="attr1" value="Holds.ApplicantID">
+        <label for="vehicle1"> ApplicantID </label>
+        <input type="checkbox" id="attr2" name="attr2" value="NameOfApplicants">
+        <label for="vehicle2"> Name </label>
+        <input type="checkbox" id="attr3" name="attr3" value="Nationality">
+        <label for="vehicle3"> Nationality </label>
+        <input type="checkbox" id="attr4" name="attr4" value="VisaID">
+        <label for="vehicle3"> VisaID </label>
+        <input type="checkbox" id="attr5" name="attr5" value="IssueDate">
+        <label for="vehicle3"> Issue Date </label>
+        <input type="checkbox" id="attr6" name="attr6" value="ExpirationDate">
+        <label for="vehicle3"> Expiration Date </label>
+        <br>
+        <br>
+        <input type="submit" value="View" name="viewAllHolders"></p>
+    </form>
     <?php echo $viewAllHolderStatement; ?>
     <hr />
 
