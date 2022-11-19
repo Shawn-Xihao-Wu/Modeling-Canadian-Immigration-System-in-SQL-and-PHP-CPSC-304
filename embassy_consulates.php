@@ -171,11 +171,13 @@ function handleCountRequest()
 
 function handleViewAllRequest()
 {
+
     global $db_conn, $viewAllStatement;
 
     $result = executePlainSQL("SELECT * FROM EmbassyConsulates");
 
     $viewAllStatement = printAllTuples($result);
+
 }
 
 // HANDLE ALL POST ROUTES
