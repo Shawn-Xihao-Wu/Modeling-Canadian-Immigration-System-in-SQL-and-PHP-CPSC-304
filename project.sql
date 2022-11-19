@@ -74,7 +74,8 @@ CREATE TABLE StudentVisaVerifiedBy (
     StudyLevel      VARCHAR(100)        NOT NULL,
     InstitutionID   VARCHAR(100)        NOT NULL,
     FOREIGN KEY (VisaID)
-        REFERENCES VisaFromIssue,
+        REFERENCES VisaFromIssue
+        ON DELETE CASCADE,
     FOREIGN KEY (InstitutionID) 
         REFERENCES ApprovedInstitutions
 );
