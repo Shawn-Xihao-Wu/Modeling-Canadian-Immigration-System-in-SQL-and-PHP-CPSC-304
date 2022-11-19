@@ -95,6 +95,22 @@
         return $statement;
     }
 
+    function printTravelRecordTuples($result)
+    { //prints results from a select statement
+        $statement = "";
+        $statement .= "<br>Retrieving data...<br>";
+        $statement .= "<table>";
+        $statement .= "<tr><th>RecordID</th><th>TimeOfTravel</th><th>Destination</th><th>Departure</th><th>VisaID</th></tr>";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[3] . "</td></tr>"; //or just use "echo $row[0]"
+        }
+
+        $statement .= "</table>";
+
+        return $statement;
+    }
+
     function printSelectedTuples($result)
     { //prints results from a select statement
         $statement = "";
@@ -171,6 +187,19 @@
         $viewAllStatement = printAllTuples($result);   
     }
 
+    function handleViewTravelRecordRequest()
+    {
+        global $db_conn, $viewTravelRecordStatement;
+
+        $result = executePlainSQL("SELECT * 
+                                   FROM TravelHistoryRecordsTravelsBy t
+                                   WHERE NOT EXISTS (SELECT i.Destination
+                                                     FROM InOut i
+                                                     WHERE NOT EXISTS (i.destination = 'Canada'))");
+        
+        $viewAllStatement = printTravelRecordTuples($result);   
+    }
+
     // HANDLE ALL POST ROUTES
     // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
     function handlePOSTRequest()
@@ -193,6 +222,8 @@
                 handleCountRequest();
             } else if (array_key_exists('viewAllTuples', $_GET)) {
                 handleViewAllRequest();
+            } else if (array_key_exists('viewTravelRecord', $_GET)) {
+                handleViewTravelRecordRequest();
             }
 
             disconnectFromDB();
@@ -201,7 +232,7 @@
 
     if (isset($_POST['searchSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewTravelRecordRequest'])) {
         handleGETRequest();
     }
     ?>
@@ -216,7 +247,14 @@
       <form method="POST" action="issued_visas.php">
           <!--refresh page when submitted-->
           <input type="hidden" id="searchQueryRequest" name="searchQueryRequest">
-          Filtered by type: <input type="text" name="type"> <br /><br />
+          
+          <label for="Category">Choose a type: </label>
+          <select id="Category" name="type" class="form-control">
+              <option value="TOURIST">TOURIST</option>
+              <option value="ASYLUM">ASYLUM</option>
+              <option value="ASYLUM">WORK</option>
+              <option value="ASYLUM">STUDENT</option>
+          </select> <br /><br />
 
           <input type="submit" value="Search" name="searchSubmit"></p>
       </form>
@@ -241,6 +279,16 @@
           <input type="submit" value="View" name="viewAllTuples"></p>
       </form>
       <?php echo $viewAllStatement ?>
+
+      <hr />
+
+      <h2>View All travel records which desination is Canada</h2>
+      <form method="GET" action="issued_visas.php">
+          <!--refresh page when submitted-->
+          <input type="hidden" id="viewTravelRecordRequest" name="viewTravelRecordRequest">
+          <input type="submit" value="View" name="viewTravelRecord"></p>
+      </form>
+      <?php echo $viewTravelRecordStatement ?>
 
       <hr />
 
