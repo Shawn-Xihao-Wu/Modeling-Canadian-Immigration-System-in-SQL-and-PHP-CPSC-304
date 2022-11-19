@@ -181,12 +181,12 @@
     </form>
     <?php echo $resetStatement ?>
 
-    <p>
+    <!-- <p>
       <a href="oracle-test.php">
         <button class="button button1">See sample project</button>
       </a>
     </p>
-    <h1>Manage Visas</h1>
+    <h1>Manage Visas</h1> -->
 
     <p>
       <a href="issued_visas.php">
@@ -216,7 +216,7 @@
     <h1>Manage Embassy & Consulates</h1>
     <p>
       <a href="embassy_consulates.php">
-        <button class="button button2">Manage embassys/consulates</button>
+        <button class="button button2">Embassys/consulates</button>
       </a>
     </p>
 </body>
