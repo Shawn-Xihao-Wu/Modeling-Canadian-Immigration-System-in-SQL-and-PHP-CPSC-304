@@ -7,6 +7,7 @@
         $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
         $viewAllStatement = "";
         $viewGroupByStatement = "";
+        $viewAverageStatement = "";
 
         function debugAlertMessage($message) {
             global $show_debug_alert_messages;
@@ -108,6 +109,21 @@
 
         }
 
+        function printAverageTuples($result)
+        {
+            $statement = "";
+            $statement .= "<table>";
+            $statement .= "<tr><th>Nationality</th><th> Average age </th></tr>";
+
+            while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+                $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td></tr>"; //or just use "echo $row[0]"
+            }
+
+            $statement .= "</table>";
+
+            return $statement;
+        }
+
         function connectToDB() {
             global $db_conn;
 
@@ -198,6 +214,14 @@
             $viewGroupByStatement = printGroupByTuples($result);
         }
 
+        function handleAverageRequest() {
+            global $db_conn, $viewAverageStatement;
+
+            $result = executePlainSQL("SELECT Nationality, FLOOR(AVG((CURRENT_DATE - DateOfBirth)/365)) FROM Applicants GROUP BY Nationality");
+
+            $viewAverageStatement = printAverageTuples($result);
+        }
+
 
 
         // HANDLE ALL POST ROUTES
@@ -224,6 +248,8 @@
                     handleViewAllRequest();
                 } else if (array_key_exists('viewGroupByHavingTuple', $_GET)) {
                     handleGroupByRequest();
+                } else if (array_key_exists('viewAverage', $_GET)) {
+                    handleAverageRequest();
                 }
 
                 disconnectFromDB();
@@ -232,7 +258,7 @@
 
 		if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest'])) {
+        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest']) || isset($_GET['viewAverageRequest'])) {
             handleGETRequest();
         }
 		?>
@@ -525,6 +551,16 @@
             <input type="submit" value="View" name="viewAllTuples"></p>
             </form>
         <?php echo $viewAllStatement ?>
+
+        <hr />
+
+        <h2>View average age of applicants from each country </h2>
+            <form method="GET" action="applicants.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="viewAverageRequest" name="viewAverageRequest">
+            <input type="submit" value="View" name="viewAverage"></p>
+            </form>
+        <?php echo $viewAverageStatement ?>
 
         <hr />
 
