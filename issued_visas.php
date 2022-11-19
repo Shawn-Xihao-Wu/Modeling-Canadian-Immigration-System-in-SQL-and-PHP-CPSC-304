@@ -252,8 +252,8 @@
           <select id="Category" name="type" class="form-control">
               <option value="TOURIST">TOURIST</option>
               <option value="ASYLUM">ASYLUM</option>
-              <option value="ASYLUM">WORK</option>
-              <option value="ASYLUM">STUDENT</option>
+              <option value="WORK">WORK</option>
+              <option value="STUDENT">STUDENT</option>
           </select> <br /><br />
 
           <input type="submit" value="Search" name="searchSubmit"></p>
