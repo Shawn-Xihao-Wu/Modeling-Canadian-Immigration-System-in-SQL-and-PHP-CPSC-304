@@ -261,15 +261,15 @@ if (isset($_POST['viewTravelTupleRequest'])) {
         <input type="hidden" id="viewAllHolderRequest" name="viewAllHolderRequest">
         <input type="checkbox" id="attr1" name="attr1" value="Holds.ApplicantID">
         <label for="vehicle1"> ApplicantID </label>
-        <input type="checkbox" id="attr2" name="attr2" value="NameOfApplicants">
+        <input type="checkbox" id="attr2" name="attr2" value="Applicants.NameOfApplicants">
         <label for="vehicle2"> Name </label>
-        <input type="checkbox" id="attr3" name="attr3" value="Nationality">
+        <input type="checkbox" id="attr3" name="attr3" value="Applicants.Nationality">
         <label for="vehicle3"> Nationality </label>
-        <input type="checkbox" id="attr4" name="attr4" value="VisaID">
+        <input type="checkbox" id="attr4" name="attr4" value="Holds.VisaID">
         <label for="vehicle3"> VisaID </label>
-        <input type="checkbox" id="attr5" name="attr5" value="IssueDate">
+        <input type="checkbox" id="attr5" name="attr5" value="Holds.IssueDate">
         <label for="vehicle3"> Issue Date </label>
-        <input type="checkbox" id="attr6" name="attr6" value="ExpirationDate">
+        <input type="checkbox" id="attr6" name="attr6" value="Holds.ExpirationDate">
         <label for="vehicle3"> Expiration Date </label>
         <br>
         <br>
