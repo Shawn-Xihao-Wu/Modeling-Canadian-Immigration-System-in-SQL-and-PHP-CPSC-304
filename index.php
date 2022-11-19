@@ -216,7 +216,7 @@
     <h1>Manage Embassy & Consulates</h1>
     <p>
       <a href="embassy_consulates.php">
-        <button class="button button2">Manage embassys/consulates</button>
+        <button class="button button2">Embassys/consulates</button>
       </a>
     </p>
 </body>
