@@ -9,12 +9,12 @@ $viewTravelStatement = "";
 $viewAllHolderStatement = "";
 $numOfColumns = 0;
 $columns = array(
-    "ApplicantID"       => $_GET['attr1'],
-    "Name"              => $_GET['attr2'],
-    "Nationality"       => $_GET['attr3'],
-    "VisaID"            => $_GET['attr4'],
-    "Issue Date"        => $_GET['attr5'],
-    "Expiration Date"   => $_GET['attr6']
+    "ApplicantID"       => $_POST['attr1'],
+    "Name"              => $_POST['attr2'],
+    "Nationality"       => $_POST['attr3'],
+    "VisaID"            => $_POST['attr4'],
+    "Issue Date"        => $_POST['attr5'],
+    "Expiration Date"   => $_POST['attr6']
 );
 
 function debugAlertMessage($message)
@@ -222,18 +222,7 @@ function handlePOSTRequest()
     if (connectToDB()) {
         if (array_key_exists('viewTravelTuples', $_POST)) {
             handleViewTravelTupleRequest();
-        }
-
-        disconnectFromDB();
-    }
-}
-
-// HANDLE ALL GET ROUTES
-// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-function handleGETRequest()
-{
-    if (connectToDB()) {
-        if (array_key_exists('viewAllHolders', $_GET)) {
+        } else if (array_key_exists('viewAllHolders', $_POST)) {
             handleViewAllHolderRequest();
         }
 
@@ -241,10 +230,8 @@ function handleGETRequest()
     }
 }
 
-if (isset($_POST['viewTravelTupleRequest'])) {
+if (isset($_POST['viewTravelTupleRequest']) || isset($_POST['viewAllHolderRequest'])) {
     handlePOSTRequest();
-} else if (isset($_GET['viewAllHolderRequest'])) {
-    handleGETRequest();
 }
 ?>
 
@@ -256,7 +243,7 @@ if (isset($_POST['viewTravelTupleRequest'])) {
 
     <h2>View All Visa-Holders </h2>
     <p>Select the column names of the table (<em>please select at least one</em>):</p>
-    <form method="GET" action="holders.php">
+    <form method="POST" action="holders.php">
         <!--refresh page when submitted-->
         <input type="hidden" id="viewAllHolderRequest" name="viewAllHolderRequest">
         <input type="checkbox" id="attr1" name="attr1" value="Holds.ApplicantID">
@@ -279,7 +266,7 @@ if (isset($_POST['viewTravelTupleRequest'])) {
     <hr />
 
     <h2>View Travel History</h2>
-    <p>Please use ApplicantID to identify the individual whose travel history you want to see <em>(click "View" above to see for ApplicantID)</em>.</p>
+    <p>Please use VisaID to identify the individual whose travel history you want to see <em>(click "View" above to see for VisaID)</em>.</p>
     <form method="POST" action="holders.php">
         <!--refresh page when submitted-->
         ApplicantID: <input type="text" name="ApplicantID"> <br /><br />
