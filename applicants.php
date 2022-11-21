@@ -8,6 +8,7 @@
         $viewAllStatement = "";
         $viewGroupByStatement = "";
         $viewAverageStatement = "";
+        $viewNestedStatement = "";
 
         function debugAlertMessage($message) {
             global $show_debug_alert_messages;
@@ -231,6 +232,16 @@
             $viewAverageStatement = printAverageTuples($result);
         }
 
+        function handleNestedRequest() {
+            global $db_conn, $viewNestedStatement;
+
+            // GROUP BY NESTED
+            $result = executePlainSQL("SELECT A.Nationality, FLOOR(AVG((CURRENT_DATE - A.DateOfBirth)/365)) FROM Applicants A GROUP BY A.Nationality HAVING 1 < (SELECT COUNT(*) FROM Applicants A2 WHERE A.Nationality = A2.Nationality)");
+
+            $viewNestedStatement = printAverageTuples($result);
+
+        }
+
 
 
         // HANDLE ALL POST ROUTES
@@ -259,6 +270,8 @@
                     handleGroupByRequest();
                 } else if (array_key_exists('viewAverage', $_GET)) {
                     handleAverageRequest();
+                } else if (array_key_exists('viewNestedTuple', $_GET)) {
+                    handleNestedRequest();
                 }
 
                 disconnectFromDB();
@@ -267,7 +280,8 @@
 
 		if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest']) || isset($_GET['viewAverageRequest'])) {
+        } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest']) 
+        || isset($_GET['viewAverageRequest']) || isset($_GET['viewNestedTupleRequest'])) {
             handleGETRequest();
         }
 		?>
@@ -591,7 +605,16 @@
 
         <hr />
 
-        
+        <h2>Find the applicants average age in countries having more than 1 applicant</h2>
+            <form method="GET" action="applicants.php">
+            <!--refresh page when submitted-->
+            <input type="hidden" id="viewNestedTupleRequest" name="viewNestedTupleRequest">
+            <input type="submit" value="View" name="viewNestedTuple"></p>
+            </form>
+        <?php echo $viewNestedStatement ?>
+
+        <hr />
+
 
         <h2>Applicants count</h2>
         <form method="GET" action="applicants.php"> <!--refresh page when submitted-->
