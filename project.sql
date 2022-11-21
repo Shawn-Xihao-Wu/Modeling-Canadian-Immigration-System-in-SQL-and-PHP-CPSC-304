@@ -240,17 +240,31 @@ INSERT into StudentVisaVerifiedBy VALUES('SRYC2471','UNDERGRADUATE','ENEA2891');
 
 INSERT into InOut VALUES('Canada', 'US', 1);
 
-INSERT into InOut VALUES('China', 'Canada', 0);
-
 INSERT into InOut VALUES('US', 'Canada', 0);
 
+INSERT into InOut VALUES('Canada', 'China', 1);
+
+INSERT into InOut VALUES('China', 'Canada', 0);
+
 INSERT into InOut VALUES('Canada', 'Mexico', 1);
+
+INSERT into InOut VALUES('Mexico', 'Canada', 0);
+
+INSERT into InOut VALUES('Canada', 'Germany', 1);
 
 INSERT into InOut VALUES('Germany', 'Canada', 0);
 
 INSERT into TravelHistoryRecordsTravelsBy VALUES('WWW111', TO_TIMESTAMP('2012-12-06 14:34:56.035000', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'Canada', 'US', 'TETY1471');
 
+INSERT into TravelHistoryRecordsTravelsBy VALUES('WWW112', TO_TIMESTAMP('2012-12-28 09:23:22.453000', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'US', 'Canada', 'TETY1471');
+
+INSERT into TravelHistoryRecordsTravelsBy VALUES('WWW113', TO_TIMESTAMP('2013-12-05 12:23:11.123500', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'Canada', 'US', 'TETY1471');
+
+INSERT into TravelHistoryRecordsTravelsBy VALUES('WWW114', TO_TIMESTAMP('2013-12-27 07:10:11.456600', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'US', 'Canada', 'TETY1471');
+
 INSERT into TravelHistoryRecordsTravelsBy VALUES('EEE222', TO_TIMESTAMP('2018-09-30 02:45:23.356100', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'China', 'Canada', 'AEYE2472');
+
+INSERT into TravelHistoryRecordsTravelsBy VALUES('EEE223', TO_TIMESTAMP('2018-11-28 15:03:24.155100', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'Canada', 'China', 'AEYE2472');
 
 INSERT into TravelHistoryRecordsTravelsBy VALUES('RRR444', TO_TIMESTAMP('2015-03-12 07:12:06.462474', 'YYYY-MM-DD HH24:MI:SS.FF6'), 'US', 'Canada', 'SXTR5137');
 

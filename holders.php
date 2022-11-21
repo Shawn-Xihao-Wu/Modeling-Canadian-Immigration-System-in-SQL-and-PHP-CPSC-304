@@ -122,10 +122,10 @@ function printTravelTuples($result)
     $statement = "";
     $statement .=  "Retrieving data...";
     $statement .= "<table>";
-    $statement .= "<tr><th>RecordID</th><th>TimeOfTravel</th><th>Destination</th><th>Departure</th><th>VisaID</th></tr>";
+    $statement .= "<tr><th>VisaID</th><th>ApplicantID</th><th>Name</th><th>Destination</th><th>Departure</th><th>Time Stamp</th></tr>";
 
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-        $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td></tr>"; 
+        $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[4] . "</td><td>" . $row[5] . "</td></tr>"; 
     }
 
     $statement .= "</table>";
@@ -134,14 +134,26 @@ function printTravelTuples($result)
 }
 
 
-function handleViewTravelTupleRequest()
+function handleCheckTravelTupleRequest()
 {
     global $db_conn, $viewTravelStatement;
 
-    $AID = trim($_POST['ApplicantID']);
-    
+    $VisaID = trim($_POST['VisaID']);
+    $InOut = $_POST['InOut'];
+    $query = "";
+    if ($InOut == -1 ) {
+        $query =    "SELECT H.VisaID, A.ApplicantID, A.NameOfApplicants,  T.Destination, T.Departure, T.TimeOfTravel
+        FROM Applicants A, Holds H, TravelHistoryRecordsTravelsBy T, InOut I 
+        WHERE A.ApplicantID = H.ApplicantID AND H.VisaID = T.VisaID AND T.Destination = I.Destination AND T.Departure = I.Departure 
+                AND T.VisaID = '" . $VisaID . "'";
+    } else {
+        $query =    "SELECT H.VisaID, A.ApplicantID, A.NameOfApplicants, T.Destination, T.Departure, T.TimeOfTravel
+        FROM Applicants A, Holds H, TravelHistoryRecordsTravelsBy T, InOut I 
+        WHERE A.ApplicantID = H.ApplicantID AND H.VisaID = T.VisaID AND T.Destination = I.Destination AND T.Departure = I.Departure 
+                AND T.VisaID = '" . $VisaID . "' AND I.InOut = " . $InOut;
+    }
 
-    $result = executePlainSQL("SELECT * FROM TravelHistoryRecordsTravelsBy WHERE VisaID = ANY (SELECT VisaID FROM Holds WHERE ApplicantID = '" . $AID . "')");
+    $result = executePlainSQL($query);
 
 
     $viewTravelStatement = printTravelTuples($result);
@@ -220,8 +232,8 @@ function handleViewAllHolderRequest()
 function handlePOSTRequest()
 {
     if (connectToDB()) {
-        if (array_key_exists('viewTravelTuples', $_POST)) {
-            handleViewTravelTupleRequest();
+        if (array_key_exists('checkTravelTuples', $_POST)) {
+            handleCheckTravelTupleRequest();
         } else if (array_key_exists('viewAllHolders', $_POST)) {
             handleViewAllHolderRequest();
         }
@@ -230,7 +242,7 @@ function handlePOSTRequest()
     }
 }
 
-if (isset($_POST['viewTravelTupleRequest']) || isset($_POST['viewAllHolderRequest'])) {
+if (isset($_POST['checkTravelTupleRequest']) || isset($_POST['viewAllHolderRequest'])) {
     handlePOSTRequest();
 }
 ?>
@@ -265,13 +277,20 @@ if (isset($_POST['viewTravelTupleRequest']) || isset($_POST['viewAllHolderReques
     <?php echo $viewAllHolderStatement; ?>
     <hr />
 
-    <h2>View Travel History</h2>
-    <p>Please use VisaID to identify the individual whose travel history you want to see <em>(click "View" above to see for VisaID)</em>.</p>
+    <h2>Check Travel History</h2>
+    <p>Please use VisaID to identify the individual whose travel history you want to see <em>(click "View" above for VisaIDs)</em>.</p>
     <form method="POST" action="holders.php">
         <!--refresh page when submitted-->
-        ApplicantID: <input type="text" name="ApplicantID"> <br /><br />
-        <input type="hidden" id="viewTravelTupleRequest" name="viewTravelTupleRequest">
-        <input type="submit" value="View" name="viewTravelTuples"></p>
+        VisaID: <input type="text" name="VisaID">
+        <label for="InOut"> Filtered by inbound/outbound: </label>
+        <select name="InOut" id="InOut">
+        <option value="-1">All</option>
+        <option value="1">Inbound</option>
+        <option value="0">Outbound</option>
+        </select>
+        <br /><br />
+        <input type="hidden" id="checkTravelTupleRequest" name="checkTravelTupleRequest">
+        <input type="submit" value="Check" name="checkTravelTuples"></p>
     </form>
     <?php echo $viewTravelStatement; ?>
 
