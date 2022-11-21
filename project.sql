@@ -119,9 +119,11 @@ CREATE TABLE Holds (
     ExpirationDate      DATE                NOT NULL,
     PRIMARY KEY (ApplicantID, VisaID),
     FOREIGN KEY (ApplicantID)
-        REFERENCES Applicants(ApplicantID),
+        REFERENCES Applicants(ApplicantID)
+        ON DELETE CASCADE,
     FOREIGN KEY (VisaID)
         REFERENCES VisaFromIssue(VisaID)
+        ON DELETE CASCADE
 );
 grant select on Holds to public;
 
