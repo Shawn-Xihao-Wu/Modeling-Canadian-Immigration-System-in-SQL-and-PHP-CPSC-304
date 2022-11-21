@@ -8,6 +8,7 @@ $show_debug_alert_messages = False; // set to True if you want alerts to show yo
 $countAllStatement = "";
 $viewAllStatement = "";
 $updateStatement = "";
+$deleteStatement = "";
 
 function debugAlertMessage($message)
 {
@@ -125,6 +126,21 @@ function disconnectFromDB()
     OCILogoff($db_conn);
 }
 
+function handleDeleteRequest()
+{
+    global $db_conn, $deleteStatement;
+    
+    $ECIDToDelete = trim($_POST['ECIDToDelete']);
+
+    $query = "DELETE FROM EmbassyConsulates WHERE ECID = '" . $ECIDToDelete . "'";
+
+    executePlainSQL($query);
+
+    $deleteStatement = "Delete the embassy/consulate with ECID: " . $ECIDToDelete;
+
+    OCICommit($db_conn);
+}
+
 function handleUpdateRequest()
 {
     global $db_conn, $updateStatement;
@@ -189,6 +205,8 @@ function handlePOSTRequest()
             handleUpdateRequest();
         } else if (array_key_exists('insertQueryRequest', $_POST)) {
             handleInsertRequest();
+        } else if (array_key_exists('deleteQueryRequest', $_POST)) {
+            handleDeleteRequest();
         }
 
         disconnectFromDB();
@@ -210,7 +228,7 @@ function handleGETRequest()
     }
 }
 
-if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit'])) {
     handlePOSTRequest();
 } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
     handleGETRequest();
@@ -223,7 +241,27 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
 <body>
 
-    <h2>Insert New Embassy/Consulates</h2>
+    <h2>View all the Embassies & Consulates </h2>
+    <form method="GET" action="embassy_consulates.php">
+        <!--refresh page when submitted-->
+        <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
+        <input type="submit" value="View" name="viewAllTuples"></p>
+    </form>
+    <?php echo $viewAllStatement ?>
+
+    <hr />
+
+    <h2>Count all the Embassies & Consulates </h2>
+    <form method="GET" action="embassy_consulates.php">
+        <!--refresh page when submitted-->
+        <input type="hidden" id="countTupleRequest" name="countTupleRequest">
+        <input type="submit" value="Count" name="countTuples"></p>
+    </form>
+    <?php echo $countAllStatement ?>
+
+    <hr />
+
+    <h2>Insert New Embassy/Consulate</h2>
     <form method="POST" action="embassy_consulates.php">
         <!--refresh page when submitted-->
         <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
@@ -482,27 +520,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
     <hr />
 
-    <h2>Count All the Embassies & Consulates </h2>
-    <form method="GET" action="embassy_consulates.php">
-        <!--refresh page when submitted-->
-        <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-        <input type="submit" value="Count" name="countTuples"></p>
-    </form>
-    <?php echo $countAllStatement ?>
-
-    <hr />
-
-    <h2>View All the Embassies & Consulates </h2>
-    <form method="GET" action="embassy_consulates.php">
-        <!--refresh page when submitted-->
-        <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
-        <input type="submit" value="View" name="viewAllTuples"></p>
-    </form>
-    <?php echo $viewAllStatement ?>
-
-    <hr />
-
-    <h2>Update Embassy & Consulate Addresses</h2>
+    <h2>Update Embassy/Consulate Address</h2>
     <p>Please use ECID to identity the embassy/consulate whose address you want to update <em>(click "View" above to see all the ECIDs)</em>.</p>
 
     <form method="POST" action="embassy_consulates.php">
@@ -515,6 +533,21 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
     </form>
     <?php echo $updateStatement ?>
 
+
+    <hr />
+
+    <h2>Delete Embassy/Consulate</h2>
+    <p>Please use ECID to identity the embassy/consulate whose address you want to delete <em>(click "View" above to see all the ECIDs)</em>.</p>
+    <p><em>Warning: deleting a embassy/consulate will delete all the visa records associated with the embassy/consulate!</em></p>
+
+    <form method="POST" action="embassy_consulates.php">
+        <!--refresh page when submitted-->
+        <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+        ECID: <input type="text" name="ECIDToDelete"> <br /><br />
+
+        <input type="submit" value="Delete" name="deleteSubmit"></p>
+    </form>
+    <?php echo $deleteStatement ?>
 
     <hr />
     <p>

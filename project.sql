@@ -52,7 +52,8 @@ grant select on VisaFromIssue to public;
 CREATE TABLE AsylumRefugeeVisa (
     VisaID      VARCHAR(100)        PRIMARY KEY,
     Reason      VARCHAR(100)        NOT NULL,
-    FOREIGN KEY (VisaID) REFERENCES VisaFromIssue
+    FOREIGN KEY (VisaID) 
+        REFERENCES VisaFromIssue
         ON DELETE CASCADE
 );
 grant select on AsylumRefugeeVisa to public;
@@ -172,6 +173,7 @@ CREATE TABLE InterviewedBy(
         REFERENCES InterviewsMakes,
     FOREIGN KEY (ECID, OfficerID)
         REFERENCES ImmigrationOfficersWorksIn(ECID, OfficerID)
+        ON DELETE CASCADE
 );
 grant select on InterviewedBy to public;
 
