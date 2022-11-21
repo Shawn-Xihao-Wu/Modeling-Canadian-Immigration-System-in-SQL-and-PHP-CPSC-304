@@ -116,10 +116,10 @@
         $statement = "";
         $statement .= "<br>Retrieving data...<br>";
         $statement .= "<table>";
-        $statement .= "<tr><th>VisaID</th><th>ApplicationID</th><th>ECID</th></tr>";
+        $statement .= "<tr><th>Selected Attribute</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-            $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>"; //or just use "echo $row[0]"
+            $statement .= "<tr><td>" . $row[0] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         $statement .= "</table>";
@@ -161,9 +161,11 @@
     {
         global $db_conn, $viewSelectedStatement;
 
-        $type = trim($_POST['type']);
+        $visa = trim($_POST['visa']);
+        $attribute = trim($_POST['attribute']);
+        $VisaID = trim($_POST['VisaID']);
 
-        $result = executePlainSQL("SELECT VisaID,ApplicationID,ECID FROM VisaFromIssue WHERE VisaType = '" .$type. "'");
+        $result = executePlainSQL("SELECT " .$attribute. " FROM " .$visa. " WHERE VisaID = '" .$VisaID. "'");
         
         $viewSelectedStatement = printSelectedTuples($result); 
     }
@@ -247,13 +249,22 @@
       <form method="POST" action="issued_visas.php">
           <!--refresh page when submitted-->
           <input type="hidden" id="searchQueryRequest" name="searchQueryRequest">
+
+          <label for="visa">Choose a visa: </label>
+          <select id="visa" name="visa" class="form-control">
+              <option value="AsylumRefugeeVisa">AsylumRefugeeVisa</option>
+              <option value="WorkVisaSponseredBy">WorkVisa</option>
+              <option value="StudentVisaVerifiedBy">StudentVisa</option>
+          </select> <br /><br />
+
+          <label for="attribute">Choose a attribute: </label>
+          <select id="attribute" name="attribute" class="form-control">
+              <option value="Reason">Reason</option>
+              <option value="WorkType">WorkType</option>
+              <option value="InstitutionID">InstitutionID</option>
+          </select> <br /><br />
           
-          <label for="Category">Choose a type: </label>
-          <select id="Category" name="type" class="form-control">
-              <option value="TOURIST">TOURIST</option>
-              <option value="ASYLUM">ASYLUM</option>
-              <option value="WORK">WORK</option>
-              <option value="STUDENT">STUDENT</option>
+          VisaID: <input type="text" name="VisaID"> <br /><br />
           </select> <br /><br />
 
           <input type="submit" value="Search" name="searchSubmit"></p>
