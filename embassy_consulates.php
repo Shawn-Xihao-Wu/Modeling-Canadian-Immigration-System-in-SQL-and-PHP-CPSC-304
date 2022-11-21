@@ -96,6 +96,22 @@ function printAllTuples($result)
     return $statement;
 }
 
+function printSelectedTuples($result)
+{ //prints results from a select statement
+    $statement = "";
+    $statement .=  "Retrieving data...";
+    $statement .= "<table>";
+    $statement .= "<tr><th>ECID</th><th>Address</th><th>Country</th></tr>";
+
+    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+        $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td></tr>"; //or just use "echo $row[0]"
+    }
+
+    $statement .= "</table>";
+
+    return $statement;
+}
+
 function connectToDB()
 {
     global $db_conn;
@@ -180,6 +196,24 @@ function handleViewAllRequest()
 
 }
 
+function handleViewSelectedRequest()
+{
+
+    global $db_conn, $viewSelectedStatement;
+
+    $result = executePlainSQL("SELECT *
+                                    FROM EmbassyConsulates e1
+                                    WHERE NOT EXISTS (SELECT v.ECID
+                                                     FROM VisaFromIssue v
+                                                     WHERE NOT EXISTS (SELECT e2.ECID 
+                                                                            FROM EmbassyConsulates e2
+                                                                            WHERE v.ECID=e2.ECID
+                                                                            AND v.VisaType = 'ASYLUM'))");
+
+    $viewAllStatement = printSelectedTuples($result);
+
+}
+
 // HANDLE ALL POST ROUTES
 // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 function handlePOSTRequest()
@@ -204,6 +238,8 @@ function handleGETRequest()
             handleCountRequest();
         } else if (array_key_exists('viewAllTuples', $_GET)) {
             handleViewAllRequest();
+        } else if (array_key_exists('viewSelectedTuples', $_GET)) {
+            handleViewSelectedRequest();
         }
 
         disconnectFromDB();
@@ -212,7 +248,7 @@ function handleGETRequest()
 
 if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
     handlePOSTRequest();
-} else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
+} else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewSelectedTupleRequest'])) {
     handleGETRequest();
 }
 ?>
@@ -499,6 +535,16 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
         <input type="submit" value="View" name="viewAllTuples"></p>
     </form>
     <?php echo $viewAllStatement ?>
+
+    <hr />
+
+    <h2>View All the Embassies & Consulates which have issued all types of visas</h2>
+    <form method="GET" action="embassy_consulates.php">
+        <!--refresh page when submitted-->
+        <input type="hidden" id="viewSelectedTupleRequest" name="viewSelectedTupleRequest">
+        <input type="submit" value="View" name="viewSelectedTuples"></p>
+    </form>
+    <?php echo $handleViewSelectedRequest ?>
 
     <hr />
 
