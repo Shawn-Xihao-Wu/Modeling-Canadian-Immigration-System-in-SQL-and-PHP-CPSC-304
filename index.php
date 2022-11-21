@@ -137,10 +137,12 @@
   <meta charset="UTF-8">
   <title>Immigration Management</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="script.js"></script>
 </head>
 
 <style>
+  div {text-align: center;}
   .button {
     border: none;
     color: white;
@@ -153,26 +155,18 @@
     cursor: pointer;
   }
 
-  .button1 {
-    background-color: #4CAF50;
-    width: 300px;
-  }
-
-  /* Green */
   .button2 {
-    background-color: #008CBA;
+    background-color: #5b98b3;
     width: 300px;
   }
-
-  /* Blue */
 </style>
 
 <body>
   <div id="content">
-    <p><a href="https://github.students.cs.ubc.ca/CPSC304-2022W-T1/project_f3a3g_o7c8d_t5h6p">Github</a></p>
+
+    <h1>Canadian Immigration Management System</h1>
 
     <h2>Start/Reset</h2>
-    <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 
     <form method="POST" action="index.php">
       <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
@@ -181,12 +175,8 @@
     </form>
     <?php echo $resetStatement ?>
 
-    <!-- <p>
-      <a href="oracle-test.php">
-        <button class="button button1">See sample project</button>
-      </a>
-    </p>
-    <h1>Manage Visas</h1> -->
+
+    <h2>Manage Visas</h2>
 
     <p>
       <a href="issued_visas.php">
@@ -200,7 +190,7 @@
     </p>
 
 
-    <h1>Manage People</h1>
+    <h2>Manage People</h2>
     <p>
       <a href="applicants.php">
         <button class="button button2">Applicants</button>
@@ -213,12 +203,16 @@
     </p>
 
 
-    <h1>Manage Embassy & Consulates</h1>
+    <h2>Manage Embassy & Consulates</h2>
     <p>
       <a href="embassy_consulates.php">
         <button class="button button2">Embassys/consulates</button>
       </a>
     </p>
+
+
+    <p><a href="https://github.students.cs.ubc.ca/CPSC304-2022W-T1/project_f3a3g_o7c8d_t5h6p"><i class="fa fa-github" style="font-size:36px;color:#C8AE81"></i></a></p>
+  </div>
 </body>
-</div>
+
 </html>
