@@ -98,7 +98,8 @@ CREATE TABLE TravelHistoryRecordsTravelsBy (
     Departure       VARCHAR(100)        NOT NULL,
     VisaID          VARCHAR(100)        NOT NULL,
     FOREIGN KEY (VisaID)
-        REFERENCES VisaFromIssue,
+        REFERENCES VisaFromIssue
+        ON DELETE CASCADE,
     FOREIGN KEY (Destination, Departure)
         REFERENCES InOut(Destination, Departure)
 );
