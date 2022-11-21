@@ -60,24 +60,26 @@ grant select on AsylumRefugeeVisa to public;
 CREATE TABLE WorkVisaSponseredBy (
     VisaID          VARCHAR(100)        PRIMARY KEY,
     WorkType        VARCHAR(100)        NOT NULL,
-    InstitutionID   VARCHAR(100)        NOT NULL,    
+    InstitutionID   VARCHAR(100),    
     FOREIGN KEY (VisaID)
         REFERENCES VisaFromIssue
         ON DELETE CASCADE, 
     FOREIGN KEY (InstitutionID)
         REFERENCES ApprovedInstitutions
+        ON DELETE SET NULL
 );
 grant select on WorkVisaSponseredBy to public;
 
 CREATE TABLE StudentVisaVerifiedBy (
     VisaID          VARCHAR(100)		PRIMARY KEY,
     StudyLevel      VARCHAR(100)        NOT NULL,
-    InstitutionID   VARCHAR(100)        NOT NULL,
+    InstitutionID   VARCHAR(100),
     FOREIGN KEY (VisaID)
         REFERENCES VisaFromIssue
         ON DELETE CASCADE,
     FOREIGN KEY (InstitutionID) 
         REFERENCES ApprovedInstitutions
+        ON DELETE SET NULL
 );
 grant select on StudentVisaVerifiedBy to public;
 

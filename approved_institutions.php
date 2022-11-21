@@ -7,6 +7,7 @@
     $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
     $viewAllStatement = "";
     $countAllStatement = "";
+    $deleteStatement = "";
 
     function debugAlertMessage($message)
     {
@@ -125,15 +126,14 @@
         OCILogoff($db_conn);
     }
 
-    function handleUpdateRequest()
+    function handleDeleteRequest()
     {
-        global $db_conn;
+        global $db_conn, $deleteStatement;
 
-        $old_name = $_POST['oldName'];
-        $new_name = $_POST['newName'];
+        $toDelete = $_POST['InstitutionIDToDelete'];
 
-        // you need the wrap the old name and new name values with single quotations
-        executePlainSQL("UPDATE ApprovedInstitutions SET InstitutionName='" . $new_name . "' WHERE InstitutionName='" . $old_name . "'");
+        executePlainSQL("DELETE FROM ApprovedInstitutions WHERE InstitutionID='" . $toDelete . "'");
+        $deleteStatement = "Deleted the institution with ID ". $toDelete . "!";
         OCICommit($db_conn);
     }
 
@@ -143,8 +143,8 @@
 
         //Getting the values from user and insert data into the table
         $tuple = array(
-            ":bind1" => $_POST['InstitutuionID'],
-            ":bind2" => $_POST['InstitutuionName'],
+            ":bind1" => $_POST['InstitutionID'],
+            ":bind2" => $_POST['InstitutionName'],
             ":bind3" => $_POST['Category']
         );
 
@@ -171,8 +171,8 @@
         global $db_conn, $viewAllStatement;
 
         $result = executePlainSQL("SELECT * FROM ApprovedInstitutions");
-        
-        $viewAllStatement = printAllTuples($result);   
+
+        $viewAllStatement = printAllTuples($result);
     }
 
     // HANDLE ALL POST ROUTES
@@ -180,8 +180,8 @@
     function handlePOSTRequest()
     {
         if (connectToDB()) {
-            if (array_key_exists('updateQueryRequest', $_POST)) {
-                handleUpdateRequest();
+            if (array_key_exists('deleteQueryRequest', $_POST)) {
+                handleDeleteRequest();
             } else if (array_key_exists('insertQueryRequest', $_POST)) {
                 handleInsertRequest();
             }
@@ -205,7 +205,7 @@
         }
     }
 
-    if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+    if (isset($_POST['deleteSubmit']) || isset($_POST['insertSubmit'])) {
         handlePOSTRequest();
     } else if (isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest'])) {
         handleGETRequest();
@@ -218,34 +218,13 @@
 
   <body>
 
-      <h2>Insert New Approved Institution</h2>
-      <form method="POST" action="approved_institutions.php">
+      <h2>View All the Approved Institutions</h2>
+      <form method="GET" action="approved_institutions.php">
           <!--refresh page when submitted-->
-          <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-          InstitutuionID: <input type="text" name="InstitutuionID"> <br /><br />
-          InstitutuionName: <input type="text" name="InstitutuionName"> <br /><br />
-          <label for="Category">Choose a category: </label>
-          <select id="Category" name="Category" class="form-control">
-              <option value="Company">Company</option>
-              <option value="University/College">University/College</option>
-          </select> <br /><br />
-
-          <input type="submit" value="Insert" name="insertSubmit"></p>
+          <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
+          <input type="submit" value="View" name="viewAllTuples"></p>
       </form>
-
-      <hr />
-
-      <h2>Update Instution Name</h2>
-      <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-
-      <form method="POST" action="approved_institutions.php">
-          <!--refresh page when submitted-->
-          <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-          Old Name: <input type="text" name="oldName"> <br /><br />
-          New Name: <input type="text" name="newName"> <br /><br />
-
-          <input type="submit" value="Update" name="updateSubmit"></p>
-      </form>
+      <?php echo $viewAllStatement ?>
 
       <hr />
 
@@ -258,21 +237,41 @@
       <?php echo $countAllStatement ?>
 
       <hr />
-      <h2>View All the Approved Institutions</h2>
-      <form method="GET" action="approved_institutions.php">
+
+      <h2>Insert New Approved Institutions</h2>
+      <form method="POST" action="approved_institutions.php">
           <!--refresh page when submitted-->
-          <input type="hidden" id="viewAllTupleRequest" name="viewAllTupleRequest">
-          <input type="submit" value="View" name="viewAllTuples"></p>
+          <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
+          InstitutionID: <input type="text" name="InstitutionID"> <br /><br />
+          InstitutionName: <input type="text" name="InstitutionName"> <br /><br />
+          <label for="Category">Choose a category: </label>
+          <select id="Category" name="Category" class="form-control">
+              <option value="Company">Company</option>
+              <option value="University/College">University/College</option>
+          </select> <br /><br />
+
+          <input type="submit" value="Insert" name="insertSubmit"></p>
       </form>
-      <?php echo $viewAllStatement ?>
+
+      <hr />
+
+      <h2>Delete Institutions</h2>
+      <form method="POST" action="approved_institutions.php">
+          <!--refresh page when submitted-->
+          <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+          InstitutionID: <input type="text" name="InstitutionIDToDelete"> <br /><br />
+          <input type="submit" value="Delete" name="deleteSubmit"></p>
+      </form>
+      <?php echo $deleteStatement ?>
 
       <hr />
 
       <p>
           <a href="index.php">
               <button class="button button2">Back</button>
-        </a>
-        </p>
+          </a>
+      </p>
 
-	</body>
-</html>
+  </body>
+
+  </html>
