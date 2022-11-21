@@ -167,7 +167,7 @@
             }
 
 
-            // you need the wrap the old name and new name values with single quotations
+            // UPDATE
             executePlainSQL("UPDATE Applicants SET " . $UpdateOptions .  "= '" . $newValue . "' WHERE ApplicantID ='" . $ApplicantID . "'");
             OCICommit($db_conn);
         }
@@ -216,7 +216,7 @@
         
             global $db_conn, $viewGroupByStatement;
 
-
+            // GROUP BY having
             $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) > 0");
 
             $viewGroupByStatement = printGroupByTuples($result);
@@ -225,6 +225,7 @@
         function handleAverageRequest() {
             global $db_conn, $viewAverageStatement;
 
+            // GROUP BY
             $result = executePlainSQL("SELECT Nationality, FLOOR(AVG((CURRENT_DATE - DateOfBirth)/365)) FROM Applicants GROUP BY Nationality");
 
             $viewAverageStatement = printAverageTuples($result);
@@ -580,7 +581,7 @@
 
         <hr />
 
-        <h2>Find the country with applicants older then 50 years old</h2>
+        <h2>Find the country with applicants older than 50 years old</h2>
             <form method="GET" action="applicants.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="viewGroupByHavingTupleRequest" name="viewGroupByHavingTupleRequest">
