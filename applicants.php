@@ -209,7 +209,7 @@
             global $db_conn, $viewGroupByStatement;
 
 
-            $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) < 2");
+            $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) > 0");
 
             $viewGroupByStatement = printGroupByTuples($result);
         }
@@ -564,7 +564,7 @@
 
         <hr />
 
-        <h2>Find the country with only one applicant older then 50 years old</h2>
+        <h2>Find the country with applicants older then 50 years old</h2>
             <form method="GET" action="applicants.php">
             <!--refresh page when submitted-->
             <input type="hidden" id="viewGroupByHavingTupleRequest" name="viewGroupByHavingTupleRequest">
