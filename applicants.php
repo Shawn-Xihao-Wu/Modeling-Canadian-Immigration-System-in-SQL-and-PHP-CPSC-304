@@ -154,13 +154,21 @@
         function handleUpdateRequest() {
             global $db_conn;
 
-            $old_name = $_POST['oldName'];
-            $new_name = $_POST['newName'];
+            $ApplicantID = $_POST['ApplicantID'];
+            $newValue = $_POST['newValue'];
+            $UpdateOptions = $_POST['UpdateOptions'];
 
-            echo "here";
+            if ($UpdateOptions == "Update name") {
+                $UpdateOptions = "NameOfApplicants";
+            } else if ($UpdateOptions == "Update DateOfBirth") {
+                $UpdateOptions = "DateOfBirth";
+            } else if ($UpdateOptions == "Update Nationality") {
+                $UpdateOptions = "Nationality";
+            }
+
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE Applicants SET NameOfApplicants='" . $new_name . "' WHERE NameOfApplicants ='" . $old_name . "'");
+            executePlainSQL("UPDATE Applicants SET " . $UpdateOptions .  "= '" . $newValue . "' WHERE ApplicantID ='" . $ApplicantID . "'");
             OCICommit($db_conn);
         }
 
@@ -535,9 +543,17 @@
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
         <form method="POST" action="applicants.php"> <!--refresh page when submitted-->
+
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            Old Name: <input type="text" name="oldName"> <br /><br />
-            New Name: <input type="text" name="newName"> <br /><br />
+            ApplicantID: <input type="text" name="ApplicantID"> <br /><br />
+
+            <select name="UpdateOptions" id="UpdateOptions">
+                <option value="Update name">Update name</option>
+                <option value="Update DateOfBirth">Update DateOfBirth</option>
+                <option value="Update Nationality">Update Nationality</option>       
+            </select> <br /><br />
+
+            New Value: <input type="text" name="newValue"> <br /><br />
 
             <input type="submit" value="Update" name="updateSubmit"></p>
         </form>
