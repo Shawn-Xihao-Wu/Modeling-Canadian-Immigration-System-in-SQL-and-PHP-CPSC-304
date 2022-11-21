@@ -100,10 +100,10 @@
         $statement = "";
         $statement .= "<br>Retrieving data...<br>";
         $statement .= "<table>";
-        $statement .= "<tr><th>RecordID</th><th>TimeOfTravel</th><th>Destination</th><th>Departure</th><th>VisaID</th></tr>";
+        $statement .= "<tr><th>VisaID</th></tr>";
 
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-            $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . "</td><td>" . $row[3] . "</td><td>" . $row[3] . "</td></tr>"; //or just use "echo $row[0]"
+            $statement .= "<tr><td>" . $row[0] . "</td></tr>"; //or just use "echo $row[0]"
         }
 
         $statement .= "</table>";
@@ -193,13 +193,16 @@
     {
         global $db_conn, $viewTravelRecordStatement;
 
-        $result = executePlainSQL("SELECT * 
-                                   FROM TravelHistoryRecordsTravelsBy t
-                                   WHERE NOT EXISTS (SELECT i.Destination
-                                                     FROM InOut i
-                                                     WHERE NOT EXISTS (i.destination = 'Canada'))");
+        $result = executePlainSQL("SELECT VisaID 
+                                    FROM TravelHistoryRecordsTravelsBy 
+                                    WHERE NOT EXISTS (SELECT h.VisaID
+                                                        FROM Holds h
+                                                        WHERE NOT EXISTS (SELECT a.ApplicantID
+                                                                            FROM Applicants a
+                                                                            WHERE h.ApplicantID=a.ApplicantID
+                                                                            AND a.Nationality='China'))");
         
-        $viewAllStatement = printTravelRecordTuples($result);   
+        $viewTravelRecordStatement = printTravelRecordTuples($result);   
     }
 
     // HANDLE ALL POST ROUTES
@@ -293,7 +296,7 @@
 
       <hr />
 
-      <h2>View All travel records which desination is Canada</h2>
+      <h2>Find all China visa holders in travel record</h2>
       <form method="GET" action="issued_visas.php">
           <!--refresh page when submitted-->
           <input type="hidden" id="viewTravelRecordRequest" name="viewTravelRecordRequest">
