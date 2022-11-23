@@ -263,17 +263,25 @@ INSERT into TouristVisa VALUES('TETY1471', 'Vancouver');
 
 INSERT into TouristVisa VALUES('TQPX2910', 'Montreal');
 
+INSERT into TouristVisa VALUES('TREG2135', 'Toronto');
+
 INSERT into AsylumRefugeeVisa VALUES('AEYE2472','Famine');
 
 INSERT into AsylumRefugeeVisa VALUES('AXPQ2041','Political Prosecution');
+
+INSERT into AsylumRefugeeVisa VALUES('AFYW3933', 'War');
 
 INSERT into WorkVisaSponseredBy VALUES('WBEY1254','Programmer','AHBG1356');
 
 INSERT into WorkVisaSponseredBy VALUES('WICN4561','Analyst','QKCG1920');
 
+INSERT into WorkVisaSponseredBy VALUES('WRYW2754', 'Engineer', 'QPXM2917');
+
 INSERT into StudentVisaVerifiedBy VALUES('SXTR5137','UNDERGRADUATE','EHBG1356');
 
 INSERT into StudentVisaVerifiedBy VALUES('SRYC2471','UNDERGRADUATE','ENEA2891');
+
+INSERT into StudentVisaVerifiedBy VALUES('SERE3452', 'GRADUATE', 'EHBG1356');
 
 INSERT into InOut VALUES('Canada', 'US', 1);
 
