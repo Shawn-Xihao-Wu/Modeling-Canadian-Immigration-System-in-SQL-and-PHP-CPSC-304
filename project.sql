@@ -9,6 +9,7 @@ drop table InOut;
 drop table StudentVisaVerifiedBy;
 drop table WorkVisaSponseredBy;
 drop table AsylumRefugeeVisa;
+drop table TouristVisa;
 drop table VisaFromIssue;
 drop table Applications;
 drop table EmbassyConsulates;
@@ -48,6 +49,15 @@ CREATE TABLE VisaFromIssue (
         ON DELETE CASCADE
 );
 grant select on VisaFromIssue to public;
+
+CREATE TABLE TouristVisa (
+    VisaID      VARCHAR(100)           PRIMARY KEY,
+    Destination VARCHAR(100),
+    FOREIGN KEY (VisaID)
+        REFERENCES VisaFromIssue
+        ON DELETE CASCADE
+);
+grant select on TouristVisa to public;
 
 CREATE TABLE AsylumRefugeeVisa (
     VisaID      VARCHAR(100)        PRIMARY KEY,
@@ -232,6 +242,10 @@ INSERT into VisaFromIssue VALUES('WICN4561', 'WORK', '22222228', 'RHRU2471');
 INSERT into VisaFromIssue VALUES('SXTR5137', 'STUDENT', '66666664', 'RHRU2471');
 
 INSERT into VisaFromIssue VALUES('SRYC2471', 'STUDENT', '77777773', 'ECQR2462');
+
+INSERT into TouristVisa VALUES('TETY1471', 'Vancouver');
+
+INSERT into TouristVisa VALUES('TQPX2910', 'Montreal');
 
 INSERT into AsylumRefugeeVisa VALUES('AEYE2472','Famine');
 
