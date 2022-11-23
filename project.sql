@@ -227,21 +227,37 @@ INSERT into Applications VALUES('35627464', 0);
 
 INSERT into Applications VALUES('24624724', 0);
 
+INSERT into Applications VALUES('32524624', 1);
+
+INSERT into Applications VALUES('46246244', 1);
+
+INSERT into Applications VALUES('87346363', 1);
+
+INSERT into Applications VALUES('02395923', 1);
+
 INSERT into VisaFromIssue VALUES('TETY1471', 'TOURIST', '11111111', 'DBOQ4348');
 
 INSERT into VisaFromIssue VALUES('TQPX2910', 'TOURIST', '44444444', 'RHPW1067');
+
+INSERT into VisaFromIssue VALUES('TREG2135', 'TOURIST', '32524624', 'RHPW1067');
 
 INSERT into VisaFromIssue VALUES('AEYE2472', 'ASYLUM', '66666666', 'EGHE3624');
 
 INSERT into VisaFromIssue VALUES('AXPQ2041', 'ASYLUM', '77777777', 'ECQR2462');
 
+INSERT into VisaFromIssue VALUES('AFYW3933', 'ASYLUM', '46246244', 'ECQR2462');
+
 INSERT into VisaFromIssue VALUES('WBEY1254', 'WORK', '11111119', 'DBOQ4348');
 
 INSERT into VisaFromIssue VALUES('WICN4561', 'WORK', '22222228', 'RHRU2471');
 
+INSERT into VisaFromIssue VALUES('WRYW2754', 'WORK', '87346363', 'RHRU2471');
+
 INSERT into VisaFromIssue VALUES('SXTR5137', 'STUDENT', '66666664', 'RHRU2471');
 
 INSERT into VisaFromIssue VALUES('SRYC2471', 'STUDENT', '77777773', 'ECQR2462');
+
+INSERT into VisaFromIssue VALUES('SERE3452', 'STUDENT', '02395923', 'ECQR2462');
 
 INSERT into TouristVisa VALUES('TETY1471', 'Vancouver');
 
@@ -317,8 +333,8 @@ INSERT into Applicants VALUES('SICNFHDK', 'Xingrui Ma','China','01-June-2000');
 INSERT into Applicants VALUES('ENSHTAHQ', 'Lebron James','United States','04-June-1989');
 INSERT into Applicants VALUES('PSIENDJS', 'Stephen Curry','United States','01-June-1954');
 INSERT into Applicants VALUES('SLEODIFN', 'James Harden','United States','13-Apr-1988');
-INSERT into Applicants VALUES('WPEIDNSH', 'Kevin Love','United States','21-MAR-2000');
 INSERT into Applicants VALUES('WYZMSNJA', 'Will Byers','United States','01-FEB-1955');
+INSERT into Applicants VALUES('WPEIDNSH', 'Kevin Love','United States','21-MAR-2000');
 
 INSERT into Holds VALUES('QOXQMDHO','TETY1471','12-OCT-2012','12-OCT-2022');
 
@@ -351,6 +367,14 @@ INSERT into Creates VALUES('WPSMZKSJ','11111119', '06-JAN-2000');
 INSERT into Creates VALUES('WPSMZKSJ','22222228', '07-JAN-2000');
 
 INSERT into Creates VALUES('QISMZKLP','77777773', '08-JAN-2000');
+
+INSERT into Creates VALUES('WPEIDNSH', '32524624', '09-JAN-2000');
+
+INSERT into Creates VALUES('WPEIDNSH', '46246244', '10-JAN-2000');
+
+INSERT into Creates VALUES('WPEIDNSH', '87346363', '11-JAN-2000');
+
+INSERT into Creates VALUES('WPEIDNSH', '02395923', '12-JAN-2000');
 
 INSERT into InterviewsMakes VALUES('ABCD1111', TO_TIMESTAMP('2000-02-25 11:11:11.345673', 'YYYY-MM-DD HH24:MI:SS.FF6'), '11111111');
 
