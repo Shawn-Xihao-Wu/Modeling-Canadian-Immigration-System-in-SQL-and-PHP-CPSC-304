@@ -194,12 +194,13 @@
         global $db_conn, $viewTravelRecordStatement;
 
         $result = executePlainSQL("SELECT VisaID 
-                                    FROM TravelHistoryRecordsTravelsBy 
+                                    FROM TravelHistoryRecordsTravelsBy t
                                     WHERE NOT EXISTS (SELECT h.VisaID
                                                         FROM Holds h
-                                                        WHERE NOT EXISTS (SELECT a.ApplicantID
+                                                        WHERE NOT EXISTS (SELECT *
                                                                             FROM Applicants a
                                                                             WHERE h.ApplicantID=a.ApplicantID
+                                                                            AND t.VisaID=h.VisaID
                                                                             AND a.Nationality='China'))");
         
         $viewTravelRecordStatement = printTravelRecordTuples($result);   
