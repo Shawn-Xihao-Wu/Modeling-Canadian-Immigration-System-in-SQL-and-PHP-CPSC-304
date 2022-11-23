@@ -163,9 +163,10 @@
 
         $visa = trim($_POST['visa']);
         $attribute = trim($_POST['attribute']);
-        $VisaID = trim($_POST['VisaID']);
+        $searchItem = trim($_POST['searchItem']);
+        $input = trim($_POST['input']);
 
-        $result = executePlainSQL("SELECT " .$attribute. " FROM " .$visa. " WHERE VisaID = '" .$VisaID. "'");
+        $result = executePlainSQL("SELECT " .$attribute. " FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'");
         
         $viewSelectedStatement = printSelectedTuples($result); 
     }
@@ -267,8 +268,15 @@
               <option value="WorkType">WorkType</option>
               <option value="InstitutionID">InstitutionID</option>
           </select> <br /><br />
+
+          <label for="searchItem">Search by: </label>
+          <select id="searchItem" name="searchItem" class="form-control">
+              <option value="VisaID">VisaID</option>
+              <option value="ApplicationID">ApplicationID</option>
+              <option value="ECID">ECID</option>
+          </select> <br /><br />
           
-          VisaID: <input type="text" name="VisaID"> <br /><br />
+          Input: <input type="text" name="input"> <br /><br />
           </select> <br /><br />
 
           <input type="submit" value="Search" name="searchSubmit"></p>
