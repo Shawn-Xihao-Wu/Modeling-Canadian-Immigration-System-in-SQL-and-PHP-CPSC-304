@@ -286,8 +286,25 @@ INSERT into Applicants VALUES('QKXMSNAM', 'Quinn Holmquist','Haiti','01-JUN-1962
 INSERT into Applicants VALUES('SJZMWISK', 'Kostyantyn Zelensky','Ukraine','01-DEC-1984');
 
 INSERT into Applicants VALUES('WPSMZKSJ', 'Shinichi Mochizuki','Japan','01-AUG-1935');
+INSERT into Applicants VALUES('XISMALPQ', 'Naruto Uzumaki','Japan','27-AUG-1999');
+INSERT into Applicants VALUES('AMSIEKZP', 'Kakashi Hatake','Japan','27-July-1988');
 
 INSERT into Applicants VALUES('QISMZKLP', 'Jingping Xi','China','01-JAN-1953');
+
+INSERT into Applicants VALUES('ISXWUSPE', 'Xuexiang Ding','China','01-JAN-1990');
+INSERT into Applicants VALUES('AIRJXKAL', 'Ping Song','China','01-JAN-1986');
+INSERT into Applicants VALUES('WIXNDKXL', 'Yi Wang','China','01-JAN-1975');
+INSERT into Applicants VALUES('WIXNDSUW', 'Qi Cai','China','11-FEB-1952');
+INSERT into Applicants VALUES('ZKEOXNWB', 'Huning Wang','China','12-JAN-1980');
+INSERT into Applicants VALUES('SINCSMSK', 'Miner Chen','China','01-OCT-1948');
+INSERT into Applicants VALUES('XIEJABCG', 'Leji Zhao','China','01-SEP-1913');
+INSERT into Applicants VALUES('ERIXNSJS', 'Qiang Li','China','01-AUG-2008');
+INSERT into Applicants VALUES('SICNFHDK', 'Xingrui Ma','China','01-June-2000');
+INSERT into Applicants VALUES('ENSHTAHQ', 'Lebron James','United States','04-June-1989');
+INSERT into Applicants VALUES('PSIENDJS', 'Stephen Curry','United States','01-June-1954');
+INSERT into Applicants VALUES('SLEODIFN', 'James Harden','United States','13-Apr-1988');
+INSERT into Applicants VALUES('WPEIDNSH', 'Kevin Love','United States','21-MAR-2000');
+INSERT into Applicants VALUES('WYZMSNJA', 'Will Byers','United States','01-FEB-1955');
 
 INSERT into Holds VALUES('QOXQMDHO','TETY1471','12-OCT-2012','12-OCT-2022');
 
