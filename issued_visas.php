@@ -260,6 +260,7 @@
               <option value="AsylumRefugeeVisa">AsylumRefugeeVisa</option>
               <option value="WorkVisaSponseredBy">WorkVisa</option>
               <option value="StudentVisaVerifiedBy">StudentVisa</option>
+              <option value="TouristVisa">TouristVisa</option>
           </select> <br /><br />
 
           <label for="attribute">Choose a attribute: </label>
@@ -267,6 +268,7 @@
               <option value="Reason">Reason</option>
               <option value="WorkType">WorkType</option>
               <option value="InstitutionID">InstitutionID</option>
+              <option value="Destination">Destination</option>
           </select> <br /><br />
 
           <label for="searchItem">Search by: </label>
@@ -302,16 +304,6 @@
           <input type="submit" value="View" name="viewAllTuples"></p>
       </form>
       <?php echo $viewAllStatement ?>
-
-      <hr />
-
-      <h2>Find all China visa holders in travel record</h2>
-      <form method="GET" action="issued_visas.php">
-          <!--refresh page when submitted-->
-          <input type="hidden" id="viewTravelRecordRequest" name="viewTravelRecordRequest">
-          <input type="submit" value="View" name="viewTravelRecord"></p>
-      </form>
-      <?php echo $viewTravelRecordStatement ?>
 
       <hr />
 
