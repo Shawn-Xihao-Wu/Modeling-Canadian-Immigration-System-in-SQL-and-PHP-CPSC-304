@@ -167,6 +167,10 @@
 
     <h1>Canadian Immigration Management System</h1>
 
+    <img src="flag.png" 
+    style="position:fixed; right:950px; bottom:200px; width:200px; height:100px; border:none;"
+    alt="flag" width="600" height="300">
+
     <h2>Start/Reset</h2>
 
     <form method="POST" action="index.php">
@@ -205,6 +209,7 @@
 
 
     <h2>Manage Embassy & Consulates</h2>
+    
     <p>
       <a href="embassy_consulates.php">
         <button class="button button2">Embassys/consulates</button>
