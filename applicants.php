@@ -190,7 +190,9 @@ function handleUpdateRequest()
 
 
     // UPDATE
-    executePlainSQL("UPDATE Applicants SET " . $UpdateOptions .  "= '" . $newValue . "' WHERE ApplicantID ='" . $ApplicantID . "'");
+    executePlainSQL("UPDATE Applicants SET " . 
+        $UpdateOptions .  "= '" . $newValue . 
+        "' WHERE ApplicantID ='" . $ApplicantID . "'");
     OCICommit($db_conn);
 }
 
