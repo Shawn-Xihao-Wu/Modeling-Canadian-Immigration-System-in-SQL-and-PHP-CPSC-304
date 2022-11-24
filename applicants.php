@@ -242,7 +242,8 @@ function handleGroupByRequest()
     global $db_conn, $viewGroupByStatement;
 
     // GROUP BY having
-    $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) > 0 ORDER BY Nationality");
+    $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants 
+    WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) > 0 ORDER BY Nationality");
 
     $viewGroupByStatement = printGroupByTuples($result);
 }
@@ -252,7 +253,8 @@ function handleAverageRequest()
     global $db_conn, $viewAverageStatement;
 
     // GROUP BY
-    $result = executePlainSQL("SELECT Nationality, FLOOR(AVG((CURRENT_DATE - DateOfBirth)/365)) FROM Applicants GROUP BY Nationality ORDER BY Nationality");
+    $result = executePlainSQL("SELECT Nationality, FLOOR(AVG((CURRENT_DATE - DateOfBirth)/365)) 
+    FROM Applicants GROUP BY Nationality ORDER BY Nationality");
 
     $viewAverageStatement = printAverageTuples($result);
 }
@@ -262,7 +264,8 @@ function handleNestedRequest()
     global $db_conn, $viewNestedStatement;
 
     // GROUP BY NESTED
-    $result = executePlainSQL("SELECT A.Nationality, FLOOR(AVG((CURRENT_DATE - A.DateOfBirth)/365)) FROM Applicants A GROUP BY A.Nationality HAVING 3 < (SELECT COUNT(*) FROM Applicants A2 WHERE A.Nationality = A2.Nationality)");
+    $result = executePlainSQL("SELECT A.Nationality, FLOOR(AVG((CURRENT_DATE - A.DateOfBirth)/365)) 
+    FROM Applicants A GROUP BY A.Nationality HAVING 3 < (SELECT COUNT(*) FROM Applicants A2 WHERE A.Nationality = A2.Nationality)");
 
     $viewNestedStatement = printAverageTuples($result);
 }
@@ -656,7 +659,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
     <hr />
 
-    <h2>Find the applicants average age in countries having more than 3 applicant</h2>
+    <h2>Find the applicants average age in countries having more than 3 applicants</h2>
     <form method="GET" action="applicants.php">
         <!--refresh page when submitted-->
         <input type="hidden" id="viewNestedTupleRequest" name="viewNestedTupleRequest">
