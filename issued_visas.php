@@ -9,7 +9,7 @@
     $viewAllStatement = "";
     $countAllStatement = "";
     $columns = array(
-        "VisaID"         => $_POST['attr1'],
+        "VisaID"            => $_POST['attr1'],
         "ApplicationID"     => $_POST['attr2'],
         "ECID"              => $_POST['attr3']
     );
@@ -123,19 +123,40 @@
 
         $statement = "";
         $statement .= "<br>Retrieving data...<br>";
-        $statement .= "<table>";
-        $statement .= "<tr><th>Selected Attribute</th></tr>";
+        $statement .= "<table><tr>";
 
         foreach ($columns as $x => $column) {
             if(!empty($column)) {
                 $statement .= "<th>" . $x . "</th>";
             }
         }
+
+        $visa = trim($_POST['visa']);
+
+        if ($visa == "TouristVisa") {
+            $statement .= "<th>Destination</th>";
+        } else if ($visa == "AsylumRefugeeVisa") {
+            $statement .= "<th>Reason</th>";
+        } else if ($visa == "WorkVisaSponseredBy") {
+            $statement .= "<th>WorkType</th><th>InstitutionID</th>";
+        } else if ($visa == "StudentVisaVerifiedBy") {
+            $statement .= "<th>StudyLevel</th><th>InstitutionID</th>";
+        }
         $statement .= "</tr>";
+
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
             $statement .= "<tr>";
             for ($i = 0; $i<$numOfColumns; $i++) {
                 $statement .= "<td>" . $row[$i] . "</td>";
+            }
+            if ($visa == "TouristVisa") {
+                $statement .= "<td>" . $row[$numOfColumns] . "</td>";
+            } else if ($visa == "AsylumRefugeeVisa") {
+                $statement .= "<td>" . $row[$numOfColumns] . "</td>";
+            } else if ($visa == "WorkVisaSponseredBy") {
+                $statement .= "<td>" . $row[$numOfColumns] . "</td><td>" . $row[$numOfColumns+1] . "</td>";
+            } else if ($visa == "StudentVisaVerifiedBy") {
+                $statement .= "<td>" . $row[$numOfColumns] . "</td><td>" . $row[$numOfColumns+1] . "</td>";
             }
             $statement .= "</tr>";
         }
@@ -201,7 +222,16 @@
         $visa = trim($_POST['visa']);
         $searchItem = trim($_POST['searchItem']);
         $input = trim($_POST['input']);
-        $query .= " FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'";
+        
+        if ($visa == "TouristVisa") {
+            $query .= ",Destination FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'";
+        } else if ($visa == "AsylumRefugeeVisa") {
+            $query .= ",Reason FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'";
+        } else if ($visa == "WorkVisaSponseredBy") {
+            $query .= ",WorkType,InstitutionID FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'";
+        } else if ($visa == "StudentVisaVerifiedBy") {
+            $query .= ",StudyLevel,InstitutionID FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'";
+        }
 
         return $query;
     }
@@ -312,13 +342,13 @@
               <option value="WorkVisaSponseredBy">WorkVisa</option>
               <option value="StudentVisaVerifiedBy">StudentVisa</option>
               <option value="TouristVisa">TouristVisa</option>
-          </select> <br /><br />
+          </select> 
 
         <p>Select the column names of the table (<em>please select at least one</em>):</p>
             <input type="checkbox" id="attr1" name="attr1" value="vf.VisaID">
             <label for="vehicle1"> VisaID </label>
-            <input type="checkbox" id="attr2" name="attr2" value="VisaType">
-            <label for="vehicle2"> VisaType </label>
+            <input type="checkbox" id="attr2" name="attr2" value="ApplicationID">
+            <label for="vehicle2"> ApplicationID </label>
             <input type="checkbox" id="attr3" name="attr3" value="ECID">
             <label for="vehicle3"> ECID </label>
             <br /><br />
@@ -328,10 +358,10 @@
               <option value="VisaID">VisaID</option>
               <option value="ApplicationID">ApplicationID</option>
               <option value="ECID">ECID</option>
-          </select> <br /><br />
+          </select> 
           
           Input: <input type="text" name="input"> <br /><br />
-          </select> <br /><br />
+          </select> 
 
           <input type="submit" value="Search" name="searchSubmit"></p>
       </form>
