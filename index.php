@@ -165,7 +165,7 @@
 <body>
   <div id="content">
 
-    <h1>Canadian Immigration Management System</h1>
+    <h1>🇨🇦 Canadian Immigration Management System 🇨🇦</h1>
 
     <h2>Start/Reset</h2>
 
