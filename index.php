@@ -165,7 +165,7 @@
 <body>
   <div id="content">
 
-    <h1>Canadian Immigration Management System</h1>
+    <h1>🇨🇦 Canadian Immigration Management System 🇨🇦</h1>
 
     <img src="flag.png" 
     style="position:fixed; right:950px; bottom:200px; width:200px; height:100px; border:none;"
