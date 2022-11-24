@@ -9,10 +9,9 @@
     $viewAllStatement = "";
     $countAllStatement = "";
     $columns = array(
-        "Reason"            => $_POST['attr1'],
-        "WorkType"          => $_POST['attr2'],
-        "InstitutionID"     => $_POST['attr3'],
-        "Destination"       => $_POST['attr4']
+        "VisaID"         => $_POST['attr1'],
+        "ApplicationID"     => $_POST['attr2'],
+        "ECID"              => $_POST['attr3']
     );
 
     function debugAlertMessage($message)
@@ -127,14 +126,25 @@
         $statement .= "<table>";
         $statement .= "<tr><th>Selected Attribute</th></tr>";
 
+        foreach ($columns as $x => $column) {
+            if(!empty($column)) {
+                $statement .= "<th>" . $x . "</th>";
+            }
+        }
+        $statement .= "</tr>";
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-            $statement .= "<tr><td>" . $row[0] . "</td></tr>"; //or just use "echo $row[0]"
+            $statement .= "<tr>";
+            for ($i = 0; $i<$numOfColumns; $i++) {
+                $statement .= "<td>" . $row[$i] . "</td>";
+            }
+            $statement .= "</tr>";
         }
 
-        $statement .= "</table>";
+        $statement .= "</tr></table>";
 
         return $statement;
     }
+    
 
     function connectToDB()
     {
@@ -305,14 +315,12 @@
           </select> <br /><br />
 
         <p>Select the column names of the table (<em>please select at least one</em>):</p>
-            <input type="checkbox" id="attr1" name="attr1" value="Reason">
-            <label for="vehicle1"> Reason </label>
-            <input type="checkbox" id="attr2" name="attr2" value="WorkType">
-            <label for="vehicle2"> WorkType </label>
-            <input type="checkbox" id="attr3" name="attr3" value="InstitutionID">
-            <label for="vehicle3"> InstitutionID </label>
-            <input type="checkbox" id="attr4" name="attr4" value="Destination">
-            <label for="vehicle3"> Destination </label>
+            <input type="checkbox" id="attr1" name="attr1" value="vf.VisaID">
+            <label for="vehicle1"> VisaID </label>
+            <input type="checkbox" id="attr2" name="attr2" value="VisaType">
+            <label for="vehicle2"> VisaType </label>
+            <input type="checkbox" id="attr3" name="attr3" value="ECID">
+            <label for="vehicle3"> ECID </label>
             <br /><br />
 
           <label for="searchItem">Search by: </label>
