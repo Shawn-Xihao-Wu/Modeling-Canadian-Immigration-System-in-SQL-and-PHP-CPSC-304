@@ -7,6 +7,12 @@
     $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
     $viewAllStatement = "";
     $countAllStatement = "";
+    $columns = array(
+        "Reason"            => $_POST['attr1'],
+        "WorkType"          => $_POST['attr2'],
+        "InstitutionID"     => $_POST['attr3'],
+        "Destination"       => $_POST['attr4']
+    );
 
     function debugAlertMessage($message)
     {
@@ -113,6 +119,8 @@
 
     function printSelectedTuples($result)
     { //prints results from a select statement
+        global $columns, $numOfColumns;
+
         $statement = "";
         $statement .= "<br>Retrieving data...<br>";
         $statement .= "<table>";
@@ -157,16 +165,48 @@
         OCILogoff($db_conn);
     }
 
+    function checkColumnNum()
+    {
+        global $numOfColumns, $columns;
+        foreach ($columns as $x => $column) {
+            if (!empty($column)) {
+                $numOfColumns++;
+            }
+        }
+    }
+
+    function searchQueryGenerator()
+    {
+        global $columns;
+        $query = "SELECT DISTINCT";
+    
+        foreach($columns as $x => $column) {
+            if (!empty($column)) {
+                $query .= " " . $column . ","; 
+            }
+        }
+
+        $query = substr($query, 0, -1);
+        $visa = trim($_POST['visa']);
+        $searchItem = trim($_POST['searchItem']);
+        $input = trim($_POST['input']);
+        $query .= " FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'";
+
+        return $query;
+    }
+
     function handleSearchRequest()
     {
-        global $db_conn, $viewSelectedStatement;
+        global $db_conn, $viewSelectedStatement, $numOfColumns;
+
+        checkColumnNum();
 
         $visa = trim($_POST['visa']);
         $attribute = trim($_POST['attribute']);
         $searchItem = trim($_POST['searchItem']);
         $input = trim($_POST['input']);
 
-        $result = executePlainSQL("SELECT " .$attribute. " FROM " .$visa. " v, VisaFromIssue vf WHERE v.VisaID=vf.VisaID AND vf." .$searchItem. " = '" .$input. "'");
+        $result = executePlainSQL(searchQueryGenerator());
         
         $viewSelectedStatement = printSelectedTuples($result); 
     }
@@ -263,13 +303,16 @@
               <option value="TouristVisa">TouristVisa</option>
           </select> <br /><br />
 
-          <label for="attribute">Choose a attribute: </label>
-          <select id="attribute" name="attribute" class="form-control">
-              <option value="Reason">Reason</option>
-              <option value="WorkType">WorkType</option>
-              <option value="InstitutionID">InstitutionID</option>
-              <option value="Destination">Destination</option>
-          </select> <br /><br />
+        <p>Select the column names of the table (<em>please select at least one</em>):</p>
+            <input type="checkbox" id="attr1" name="attr1" value="Reason">
+            <label for="vehicle1"> Reason </label>
+            <input type="checkbox" id="attr2" name="attr2" value="WorkType">
+            <label for="vehicle2"> WorkType </label>
+            <input type="checkbox" id="attr3" name="attr3" value="InstitutionID">
+            <label for="vehicle3"> InstitutionID </label>
+            <input type="checkbox" id="attr4" name="attr4" value="Destination">
+            <label for="vehicle3"> Destination </label>
+            <br /><br />
 
           <label for="searchItem">Search by: </label>
           <select id="searchItem" name="searchItem" class="form-control">
