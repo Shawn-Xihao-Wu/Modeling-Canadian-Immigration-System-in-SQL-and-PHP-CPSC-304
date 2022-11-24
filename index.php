@@ -181,12 +181,12 @@
 
     <p>
       <a href="issued_visas.php">
-        <button class="button button2">Manage issued visas</button>
+        <button class="button button2">Issued visas</button>
       </a>
     </p>
     <p>
       <a href="approved_institutions.php">
-        <button class="button button2">Manage approved institutions</button>
+        <button class="button button2">Approved institutions</button>
       </a>
     </p>
 
