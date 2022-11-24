@@ -666,7 +666,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
     <hr />
 
-    <h2>Find the applicants that have applied for all 4 types of visa</h2>
+    <h2>Find the applicants who have successfully applied for all 4 types of visa</h2>
     <form method="GET" action="applicants.php">
         <!--refresh page when submitted-->
         <input type="hidden" id="viewDivisionTupleRequest" name="viewDivisionTupleRequest">

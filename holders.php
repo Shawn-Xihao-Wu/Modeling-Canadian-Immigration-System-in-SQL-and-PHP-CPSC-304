@@ -142,20 +142,29 @@ function handleCheckTravelTupleRequest()
     $InOut = $_POST['InOut'];
     $query = "";
     if ($InOut == -1 ) {
-        $query =    "SELECT H.VisaID, A.ApplicantID, A.NameOfApplicants,  T.Destination, T.Departure, T.TimeOfTravel
-        FROM Applicants A, Holds H, TravelHistoryRecordsTravelsBy T, InOut I 
-        WHERE A.ApplicantID = H.ApplicantID AND H.VisaID = T.VisaID AND T.Destination = I.Destination AND T.Departure = I.Departure 
-                AND T.VisaID = '" . $VisaID . "'";
+        $query =    "SELECT H.VisaID, A.ApplicantID, A.NameOfApplicants,  
+                            T.Destination, T.Departure, T.TimeOfTravel
+                    FROM Applicants A, Holds H, 
+                        TravelHistoryRecordsTravelsBy T, InOut I 
+                    WHERE A.ApplicantID = H.ApplicantID AND 
+                            H.VisaID = T.VisaID AND 
+                            T.Destination = I.Destination AND 
+                            T.Departure = I.Departure AND 
+                            T.VisaID = '" . $VisaID . "'";
     } else {
-        $query =    "SELECT H.VisaID, A.ApplicantID, A.NameOfApplicants, T.Destination, T.Departure, T.TimeOfTravel
-        FROM Applicants A, Holds H, TravelHistoryRecordsTravelsBy T, InOut I 
-        WHERE A.ApplicantID = H.ApplicantID AND H.VisaID = T.VisaID AND T.Destination = I.Destination AND T.Departure = I.Departure 
-                AND T.VisaID = '" . $VisaID . "' AND I.InOut = " . $InOut;
+        $query =    "SELECT H.VisaID, A.ApplicantID, A.NameOfApplicants, 
+                    T.Destination, T.Departure, T.TimeOfTravel
+                    FROM Applicants A, Holds H, 
+                        TravelHistoryRecordsTravelsBy T, InOut I 
+                    WHERE A.ApplicantID = H.ApplicantID AND 
+                            H.VisaID = T.VisaID AND 
+                            T.Destination = I.Destination AND 
+                            T.Departure = I.Departure AND 
+                            T.VisaID = '" . $VisaID . "' AND 
+                            I.InOut = " . $InOut;
     }
 
     $result = executePlainSQL($query);
-
-
     $viewTravelStatement = printTravelTuples($result);
 }
 
