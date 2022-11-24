@@ -310,6 +310,13 @@ INSERT into Applicants VALUES('PSIENDJS', 'Stephen Curry','United States','01-Ju
 INSERT into Applicants VALUES('SLEODIFN', 'James Harden','United States','13-Apr-1988');
 INSERT into Applicants VALUES('WYZMSNJA', 'Will Byers','United States','01-FEB-1955');
 INSERT into Applicants VALUES('WPEIDNSH', 'Kevin Love','United States','21-MAR-2000');
+INSERT into Applicants VALUES('DJSNZMSJ', 'Ketty Perry','Haiti','21-MAR-1990');
+INSERT into Applicants VALUES('DJZIRUEI', 'Ketty Perry','Haiti','21-MAR-1990');
+INSERT into Applicants VALUES('ZMDKWPSL', 'Ratni Hamdan','Haiti','24-FEB-1960');
+INSERT into Applicants VALUES('PTORNSMD', 'Max Gregor','Haiti','31-MAR-1980');
+INSERT into Applicants VALUES('IRNXURHS', 'Rosa Bale','Haiti','30-Apr-1952');
+INSERT into Applicants VALUES('RIEPZMCJ', 'James Bowen','Ukraine','01-DEC-1994');
+INSERT into Applicants VALUES('FJTUDISM', 'Norlan Heinz','Ukraine','01-NOV-1999');
 
 INSERT into Holds VALUES('QOXQMDHO','TETY1471','12-OCT-2012','12-OCT-2022');
 INSERT into Holds VALUES('QKXMSNAM','TQPX2910','12-OCT-2011','12-OCT-2021');

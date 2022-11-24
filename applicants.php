@@ -1,3 +1,4 @@
+<!-- Modified from https://www.students.cs.ubc.ca/~cs-304/resources/php-oracle-resources/php-setup.html -->
 <html>
 <?php
 //this tells the system that it's no longer just parsing html; it's now parsing PHP
@@ -102,7 +103,7 @@ function printGroupByTuples($result)
 {
     $statement = "";
     $statement .= "<table>";
-    $statement .= "<tr><th>Nationality</th><th> Count </th></tr>";
+    $statement .= "<tr><th>Nationality</th><th> Count of People older than 50 </th></tr>";
 
     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
         $statement .= "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td></tr>"; //or just use "echo $row[0]"
@@ -214,23 +215,12 @@ function handleInsertRequest()
     OCICommit($db_conn);
 }
 
-function handleCountRequest()
-{
-    global $db_conn;
-
-    $result = executePlainSQL("SELECT Count(*) FROM Applicants");
-
-    if (($row = oci_fetch_row($result)) != false) {
-        echo "<br> Number of applicants: " . $row[0] . "<br>";
-    }
-}
-
 function handleViewAllRequest()
 {
 
     global $db_conn, $viewAllStatement;
 
-    $result = executePlainSQL("SELECT * FROM Applicants");
+    $result = executePlainSQL("SELECT * FROM Applicants ORDER BY Nationality");
 
     $viewAllStatement = printAllTuples($result);
 }
@@ -242,7 +232,7 @@ function handleGroupByRequest()
     global $db_conn, $viewGroupByStatement;
 
     // GROUP BY having
-    $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) > 0");
+    $result = executePlainSQL("SELECT Nationality, COUNT(*) FROM Applicants WHERE (CURRENT_DATE - DateOfBirth)/365 > 50 group by nationality HAVING COUNT(*) > 0 ORDER BY Nationality");
 
     $viewGroupByStatement = printGroupByTuples($result);
 }
@@ -252,7 +242,7 @@ function handleAverageRequest()
     global $db_conn, $viewAverageStatement;
 
     // GROUP BY
-    $result = executePlainSQL("SELECT Nationality, FLOOR(AVG((CURRENT_DATE - DateOfBirth)/365)) FROM Applicants GROUP BY Nationality");
+    $result = executePlainSQL("SELECT Nationality, FLOOR(AVG((CURRENT_DATE - DateOfBirth)/365)) FROM Applicants GROUP BY Nationality ORDER BY Nationality");
 
     $viewAverageStatement = printAverageTuples($result);
 }
@@ -262,7 +252,7 @@ function handleNestedRequest()
     global $db_conn, $viewNestedStatement;
 
     // GROUP BY NESTED
-    $result = executePlainSQL("SELECT A.Nationality, FLOOR(AVG((CURRENT_DATE - A.DateOfBirth)/365)) FROM Applicants A GROUP BY A.Nationality HAVING 1 < (SELECT COUNT(*) FROM Applicants A2 WHERE A.Nationality = A2.Nationality)");
+    $result = executePlainSQL("SELECT A.Nationality, FLOOR(AVG((CURRENT_DATE - A.DateOfBirth)/365)) FROM Applicants A GROUP BY A.Nationality HAVING 3 < (SELECT COUNT(*) FROM Applicants A2 WHERE A.Nationality = A2.Nationality)");
 
     $viewNestedStatement = printAverageTuples($result);
 }
@@ -307,9 +297,7 @@ function handlePOSTRequest()
 function handleGETRequest()
 {
     if (connectToDB()) {
-        if (array_key_exists('countTuples', $_GET)) {
-            handleCountRequest();
-        } else if (array_key_exists('viewAllTuples', $_GET)) {
+        if (array_key_exists('viewAllTuples', $_GET)) {
             handleViewAllRequest();
         } else if (array_key_exists('viewGroupByHavingTuple', $_GET)) {
             handleGroupByRequest();
@@ -327,8 +315,7 @@ function handleGETRequest()
 
 if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
     handlePOSTRequest();
-} else if (
-    isset($_GET['countTupleRequest']) || isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest'])
+} else if (isset($_GET['viewAllTupleRequest']) || isset($_GET['viewGroupByHavingTupleRequest'])
     || isset($_GET['viewAverageRequest']) || isset($_GET['viewNestedTupleRequest']) || isset($_GET['viewDivisionTupleRequest'])
 ) {
     handleGETRequest();
@@ -341,14 +328,14 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
 <body>
 
-    <h2>New applicant</h2>
+    <h2>Add a New Applicant</h2>
 
     <form method="POST" action="applicants.php">
         <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-        Number: <input type="text" name="anumber"> <br /><br />
-        Name: <input type="text" name="aname"> <br /><br />
+        Applicant Number: <input type="text" name="anumber"> <br /><br />
+        Applicant Name: <input type="text" name="aname"> <br /><br />
 
-        <label for="country">Country: </label>
+        <label for="country">Nationality: </label>
         <select id="country" name="country" class="form-control">
             <option value="Afghanistan">Afghanistan</option>
             <option value="Åland Islands">Åland Islands</option>
@@ -598,14 +585,14 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
         Birthday (DD-MM-YYYY, i.e., 01-DEC-2000): <input type="text" name="abirthday"> <br /><br />
 
-        <input type="submit" value="Confirm" name="insertSubmit"></p>
+        <input type="submit" value="Add" name="insertSubmit"></p>
     </form>
 
 
     <hr />
 
     <h2>Update Name in Applicants</h2>
-    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <p>Please identify the applicants whose information you want to update by ApplicantID <em>(you can find all the ApplicantIDs in "View All Applicants" section).</em></p>
 
     <form method="POST" action="applicants.php">
         <!--refresh page when submitted-->
@@ -617,7 +604,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
             <option value="Update name">Update name</option>
             <option value="Update DateOfBirth">Update DateOfBirth</option>
             <option value="Update Nationality">Update Nationality</option>
-        </select> <br /><br />
+        </select>
 
         New Value: <input type="text" name="newValue"> <br /><br />
 
@@ -646,7 +633,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
     <hr />
 
-    <h2>Find the country with applicants older than 50 years old</h2>
+    <h2>Find the country having applicants older than 50 years old</h2>
     <form method="GET" action="applicants.php">
         <!--refresh page when submitted-->
         <input type="hidden" id="viewGroupByHavingTupleRequest" name="viewGroupByHavingTupleRequest">
@@ -656,7 +643,7 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
 
     <hr />
 
-    <h2>Find the applicants average age in countries having more than 1 applicant</h2>
+    <h2>Find the applicants average age in countries having more than 3 applicant</h2>
     <form method="GET" action="applicants.php">
         <!--refresh page when submitted-->
         <input type="hidden" id="viewNestedTupleRequest" name="viewNestedTupleRequest">
@@ -673,15 +660,6 @@ if (isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
         <input type="submit" value="View" name="viewDivisionTuples"></p>
     </form>
     <?php echo $viewDivisionStatement ?>
-
-    <hr />
-
-    <h2>Applicants count</h2>
-    <form method="GET" action="applicants.php">
-        <!--refresh page when submitted-->
-        <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-        <input type="submit" name="countTuples"></p>
-    </form>
 
     <hr />
 
